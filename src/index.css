@@ -1,0 +1,114 @@
+* {
+    font-family: Montserrat, Arial, sans-serif;
+    color-scheme: light dark;
+    box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: light) {
+    * {
+        --base: #fff;
+        --bg: #fff;
+        --bgf1: #dbe4e7;
+        --bgf2: #bbb;
+        --bgf2: #888;
+        --bgb1: #dff0f0;
+        --bgb2: #dfeaea;
+        --primary: #344050;
+        --primary-op: #dbe4e7;
+        --secondary: #1a1a1a;
+        --tertiary: #888;
+        --tertiary-op: #777;
+        --brand-key: #DDF734;
+        --brand-base-slight: #bCe1Ff;
+        --brand-base-light: #86A6CF;
+        --brand-base: #344050;
+        --brand-base-dark: #2E3947;
+        --brand-base-sdark: #0E1927;
+        --brand-key-lgb: linear-gradient(to left, var(--brand-key), var(--brand-base));
+        --brand-base-dark-lg: linear-gradient(to right bottom, var(--brand-base), var(--brand-base-sdark));
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    * {
+        --base: #111;
+        --bg: #222;
+        --bgf1: #333;
+        --bgf2: #444;
+        --bgf3: #666;
+        --bgb1: #1a1a1a;
+        --bgb2: #0f0f0f;
+        --primary: #fff;
+        --primary-op: #000;
+        --secondary: #bbb;
+        --secondary-op: #444;
+        --tertiary: #888;
+        --tertiary-op: #777;
+        --brand-key: #DDF734;
+        --brand-base: #344050;
+        --brand-base-slight: #bCe1Ff;
+        --brand-base-light: #86A6CF;
+        --brand-base-dark: #2E3947;
+        --brand-base-sdark: #0E1927;
+        --brand-base-udark: #0a0c17;
+        --brand-key-lgb: linear-gradient(to left, var(--brand-key), var(--brand-base));
+        --brand-base-dark-lg: linear-gradient(to right bottom, var(--brand-base), var(--brand-base-sdark));
+    }
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* BASIC COLORS */
+* {
+    --cwhite: #cded;
+    --lsteelblue: #406c8f;
+    --steelblue: #003c5f;
+    --lcyan: #80caff;
+    --cyan: rgb(0, 195, 255);
+    --dustycyan: rgb(100, 175, 205);
+    --green: #0fc;
+    --dgreen: #0c9;
+    --sdgreen: #096;
+    --lgold: #fff34b;
+    --gold: #f9c31b;
+    --dgold: #c9a300;
+    --sdgold: #996306;
+    --lblue: #37f;
+    --blue: #13f;
+    --mblue: #36f;
+    --dblue: #102164;
+    --sdblue: #000124;
+    --lmidnight: #2f3e4f;
+    --midnight: #0f1e2f;
+    --lred: #f88;
+    --red: #f00;
+    --dred: #c00;
+
+    --sdblue-steelblue: linear-gradient(to bottom right, var(--sdblue), var(--steelblue));
+}
+
+/* COLORWAYS */
+.red {background-color:var(--red) !important;color:white !important;}
+.lred {background-color:var(--lred) !important;color:white !important;}
+.ored {background-color:var(--red) !important;opacity:0.6;color:white !important;}
+.tile-btn.active.red:hover {background-color:var(--lred) !important;color:white !important;}
+.midnight {background-color:var(--midnight) !important;color:white !important;}
+.tile-btn.active.midnight:hover {background-color:var(--lmidnight) !important;color:white !important;}
+.dblue {background-color:var(--dblue) !important;color:white !important;}
+.sdblue {background-color:var(--sdblue) !important;color:white !important;}
+.tile-btn.active.sdblue:hover {background-color:var(--dblue) !important;color:white !important;}
+.steelblue {background-color:var(--steelblue) !important;color:white !important;}
+.tile-btn.active.steelblue:hover {background-color:var(--lsteelblue) !important;color:white !important;}
+.blue {background-color:var(--blue) !important;color:white !important;}
+.tile-btn.active.blue:hover {background-color:var(--lblue) !important;color:white !important;}
+.cyan {background-color:var(--cyan) !important;color:var(--dblue) !important;}
+.tile-btn.active.cyan:hover {background-color:var(--lcyan) !important;color:var(--dblue) !important;}
+.gold {background-color:var(--gold) !important; color:black;}
+.tile-btn.active.gold:hover {background-color:var(--lgold) !important;}
+.green {background-color:var(--green) !important;color:black !important;}
+.dgreen {background-color:var(--dgreen) !important;color:black !important;}
+.sdgreen {background-color:var(--sdgreen) !important;color:black !important;}
+.cwhite {background-color:var(--cwhite) !important;color:black !important;}

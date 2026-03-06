@@ -1,0 +1,106 @@
+main#auth {
+	width:100vw;
+	height:100vh;
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	background-image: var(--brand-base-dark-lg);
+
+	& div.inner-wrapper {
+		display:grid;
+		grid-template: 100% / 50% 50%;
+		width:80%;
+		height:80%;
+		border-radius: 50px;
+		box-shadow: 0 0 50px #0004;
+		overflow:hidden;
+
+		& section.graphic {
+			width:100%;
+			height:100%;
+			display:flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-color: var(--brand-key);
+			font-size: 1200pt;
+			color: #fff2;
+			overflow:hidden;
+		}
+
+		& section.form {
+			width:100%;
+			height:100%;
+			display:flex;
+			flex-direction: column;
+			justify-content: start;
+			align-items: center;
+			background-color: white;
+			background-image: radial-gradient(
+				circle at 100%,
+				var(--brand-base-slight),
+				white 50%
+			);
+			color:var(--brand-base);
+
+			& .exit {
+				place-self: end;
+				margin-right: 2em;
+				margin-top: 1.5em;
+				font-weight: bold;
+				border: 2px solid #888;
+				color:#888;
+				border-radius: 50%;
+				padding:3px;
+				width:1.5em;
+				height:1.5em;
+				line-height: 1em;
+				display: flex;
+				justify-content: center;
+				aspect-ratio: 1/1;
+				text-decoration: none;
+			}
+			& .exit:hover {
+				cursor: pointer;
+				color:black;
+				border: 2px solid black;
+			}
+
+			& .logotype {
+				margin: 10vh;
+				font-weight: bold;
+				color: var(--brand-key);
+				font-size: 24pt;
+			}
+
+			& form {
+				width:360px;
+				display:flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: start;
+				gap: 1em;
+
+				& input {
+					width:100%;
+					height:3em;
+					background-color: #fff4;
+					border:1px solid var(--tertiary);
+					border-radius: 3px;
+					color:black;
+					padding:12px;
+				}
+
+				& button[type=submit] {
+					width:100%;
+					height:3em;
+					background-color: var(--brand-key);
+					border-radius: 3px;
+					border:none;
+					margin-top: 1.5em;
+				}
+			}
+			& a {color: var(--brand-base-light);}
+		}
+	}
+}

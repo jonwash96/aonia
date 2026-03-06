@@ -1,0 +1,50 @@
+main#chat {
+	width:100%;
+	height:calc(100vh - 50px);
+	display:flex;
+	flex-direction: column;
+	justify-content: end;
+	
+	& section#conversation {
+		width:100%; 
+		height: calc(80vh);
+		border:1px solid grey;
+		display:flex;
+		flex-direction: column;
+		justify-content: end;
+		gap:.5em;
+
+		& div.bubble {
+			width: 60%;
+			padding: .5em;
+			margin: .25em;
+			
+			&.user {
+				text-align: right;
+				align-self: end;
+				background-color: darkgoldenrod;
+				border-radius: 12px 12px 0 12px;
+			}
+			&.friend {
+				background-color: cadetblue;
+				border-radius: 12px 12px 12px 0;
+			}
+		}
+	}
+
+	& section#write {
+		position: sticky;
+		bottom:0;
+		margin-bottom: 10px;
+		
+		&  div.input {
+			width:100%;
+			display: grid;	
+			grid-template: 100% / auto 40px 40px;
+			gap: 2px;
+			
+			& input, button {height: 40px;}
+		}
+	}
+
+}

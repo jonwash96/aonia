@@ -1,4 +1,4 @@
-const API_URL = (import.meta.env.VITE_BACK_END_SERVER_URL || "http://localhost:3443")
+const API_URL = (import.meta.env.VITE_BACK_END_SERVER_URL || "http://localhost:3080")
 const BASE_URL = `${API_URL}/auth`
 
 
@@ -33,7 +33,7 @@ export async function login(formData) {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(formData),
 		});
-		
+
 		const data = await res.json();
 		if (data.error) throw new Error(data.err);
 		if (!data.token) throw new Error("Invalid Response from server. Token not found.");

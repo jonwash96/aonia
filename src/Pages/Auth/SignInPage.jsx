@@ -1,22 +1,23 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 import * as authService from '../../services/authService';
-import { UserContext } from "../../contexts/UserContext";
+import useUser from '../../contexts/userContext'
 import './Auth.css'
 
 export default function SignInPage() {
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { uid, user, setUser, destroyUID } = useUser();
+  const [username, setUsername] = useState('cadmus');
+  const [password, setPassword] = useState('squid');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await authService.signIn({ username, password });
+      const user = await authService.login({ username, password });
       setUser(user);
-      navigate('/dashboard');
+      navigate('/chat');
+      console.log("@signin: user", user)
     } catch (err) {
       setError(err.message || 'Sign in failed');
     }
@@ -31,7 +32,7 @@ export default function SignInPage() {
 
         <section className="form">
           <Link to="/" className="exit"><div>X</div></Link>
-          <div className="logotype">$pend Sense</div>
+          <div className="logotype">A O N I A</div>
           <h1>Sign In</h1>
           {error && <p style={{ color: 'red' }}>{error}</p>}
 

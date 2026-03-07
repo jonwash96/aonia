@@ -1,18 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import './index.css'
 import useChat from '../../contexts/chatContext'
 import useUser from '../../contexts/userContext'
+import { Link, useNavigate } from 'react-router'
+
+
 
 export default function Chat() {
-	const { uid, user, destroyUID, storeUID } = useUser();
-	const { chatSocket:socket, conversation, setConversation, chats, setChats, rooms, setRooms, status, setStatus } = useChat();
+	const { uid, user, destroyCredentials, storeUID } = useUser();
+	const { chatSocket:socket,	messages,	setMessages,
+			chats, setChats, 	status, 	setStatus } = useChat();
 	const defaultState = { text: '', files: [], color:'inherit' };
 	const [input, setInput] = useState(defaultState);
-	const [roomSelect, setRoomSelect] = useState();
+	const [chatSelect, selectChat] = useState();
 	const [cmdHistory, setCmdHistory] = useState([]);
+	const navigate = useNavigate();
+
 
 	const changeRooms = (convoID) => {
-		setRoomSelect(convoID);
+		selectChat(convoID);
 		socket.emit('join-room', uid, convoID);
 	};
 
@@ -20,6 +26,7 @@ export default function Chat() {
 		const inputColor = et.value.startsWith('/') ? '#0bf' : 'inherit';
 		setInput(prev => ({ ...prev, [et.name]: et.value, color: inputColor }));
 	};
+
 	const clear = () => setInput(defaultState);
 
 	const handleKeys = (e) => {
@@ -36,24 +43,30 @@ export default function Chat() {
 				else if ('nextNode' in input && cmdHistory.length === input.nextNode)
 					setInput(defaultState)
 			}
-	}}
+	}};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (input.text === '') return console.log("No input");
 		console.log(input);
 
-		const newMessage = { ...input, uid: uid, session: user?.session || socket.id };
-		setConversation(prev => [ ...prev, newMessage ]);
+		const newMessage = { ...input, uid: uid, session: (user?.session || socket.id) };
+		setMessages(prev => [ ...prev, newMessage ]);
 
 		if (input.text.startsWith('/')) {
 			setCmdHistory(prev => [ ...prev, { 
 				...newMessage, 
 				prevNode: cmdHistory.length === 0 ? 0 : cmdHistory.length -1, 
-				nextNode: cmdHistory.length +1 } ]);
+				nextNode: cmdHistory.length +1 } ])
 		};
 
-		if (input.text==='clear') {destroyUID(); return clear()};
+		//* DEV MODE //
+		if (input.text==='/clear') {
+			destroyCredentials(); 
+			navigate('/');
+			window.location.reload();
+			return clear()
+		};
 
 		if (input.text.match(/^\/setUID\s?\=\s?\S+/gi)) 
 			storeUID(input.text.match(/^\/setUID\s?\=\s?["']?(.+)["']?/)[1], uid)
@@ -73,10 +86,12 @@ export default function Chat() {
 		else if (input.text.match(/^\/broadcast\s\S+/gi)) 
 			socket.emit('broadcast', uid, input.text.match(/(?<=broadcast\s).+/gi)[0])
 
-		else socket.emit('send-message', uid, newMessage, roomSelect);
-		clear();
-	}
 
+		else socket.emit('send-message', uid, newMessage, chatSelect);
+		clear();
+	};
+
+	
 	return (
 		<>
 		<nav>
@@ -87,21 +102,19 @@ export default function Chat() {
 				</label>
 				<input onChange={(e)=>changeRooms(e.target.id)} 
 				type="radio" name="roomSelect" id={chat._id} 
-				checked={roomSelect === chat._id || false} />
+				checked={chatSelect === chat._id || false} />
 			</span>)}
 		</nav>
 
-		<div style={{borderBottom: '1px solid grey'}}>
-			<strong>Current Rooms:</strong> {rooms?.join(', ')}<br/>
-			<span style={{color: status?.color}}>{status?.message}</span>
-		</div>
 		<main id="chat">
 			<header>
 				<h1>Chat</h1>
 			</header>
 
-			<section id="conversation">
-					<ThreadedConversation conversation={conversation} uid={uid} />
+			<section id="messages">
+					{!chats || chats.length === 0 
+						? <h3>Start a Chat</h3>
+						: <ThreadedMessages messages={messages} uid={uid} />}
 			</section>
 
 			<section id="write">
@@ -127,16 +140,16 @@ export default function Chat() {
 	)
 }
 
-function ThreadedConversation({ conversation, uid }) {
-	// console.log("@conversation", conversation)
+function ThreadedMessages({ messages, uid }) {
+	// console.log("@messages", messages)
 	const bubbleColor = (message) => message.text.startsWith('/')
 		? 'cmd'
 		: message.uid===uid ? 'user' : 'friend';
 
 	return (
 		<>
-		{conversation.length === 0 && <h3>Select a Conversation</h3>}
-		{conversation?.map((message,idx) => 
+		{messages?.length === 0 && <h3>Select a Message</h3>}
+		{messages?.map((message,idx) => 
 			<div key={idx} className={"bubble "+bubbleColor(message)} name={message.user}>
 				{message.text}<br/>
 				<small>

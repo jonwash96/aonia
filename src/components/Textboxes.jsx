@@ -1,3 +1,7 @@
+import { useState } from 'react'
+
+
+
 export function Search(props) {
 	const { name, input, onChange, onSubmit, data, icon, button } = props;
 
@@ -44,7 +48,11 @@ export function Search(props) {
 }
 
 
-export function SmartMessage({ name, input, onChange, onSubmit, onClear, data }) {
+
+export function SmartMessage({props}) {
+	const { name, onChange, onSubmit, onClear, data} = props;
+	const defaultState = { text: '', files: [], color: 'inherit' };
+	const [input, setInput] = useState(defaultState);
 	const [cmdHistory, setCmdHistory] = useState([]);
 
 	const handleKeys = (e) => {
@@ -70,31 +78,34 @@ export function SmartMessage({ name, input, onChange, onSubmit, onClear, data })
 		setInput(prev => ({ ...prev, [et.name]: et.value, color: inputColor }));
 	};
 
-	const clear = () => setInput(defaultState);
+	const clear =()=> setInput(defaultState);
 
 	const validateSubmit = (e) => {
 		e.preventDefault();
 		if (input.text === '') return console.log("No input");
 		console.log(input);
 		const validated = input;
-		return onSubmit(validated);
+		onSubmit(validated);
+		return clear();
 	};
+
 
 	return (
 		<section className={name+" SmartMessage"}>
-			<form onSubmit={onSubmit}>
+			<form onSubmit={validateSubmit}>
 				<div className="upload">
 					<input type="file" name="files" onChange={onChange} />
 				</div>
 				<div className="input">
-					<input type="text" name="text" 
-						onChange={onChange} 
-						style={{color: input.color}}
-						value={input.text}
+					<input type="text" 
+						name="text" 
+						value={input.text} 
+						onChange={onChange || handleChange} 
+						style={{color: input.color || 'inherit'}}
 						onKeyDown={handleKeys}
 						autoComplete="off"
 					/>
-					<button type="button" onClick={clear}>❌</button>
+					<button type="button" onClick={onClear}>❌</button>
 					<button type="submit">➣</button>
 				</div>
 			</form>

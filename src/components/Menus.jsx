@@ -1,4 +1,5 @@
 import '../utils/bancroft-proto'
+import ImageIcon from './ImageIcon';
 
 export function Ellipses(props) {
 	const { name, id } = props;

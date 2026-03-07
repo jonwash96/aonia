@@ -1,58 +1,57 @@
-main#chat {
+main#Chat {
 	width:100%;
 	max-height:80vh;
 	display:flex;
 	flex-direction: column;
 	justify-content: end;
-	
-	& section#conversation {
-		width:100%; 
-		height:100%;
-		border:1px solid grey;
-		display:flex;
-		flex-direction: column;
-		justify-content: end;
-		gap:.5em;
-		overflow: scroll;
+}
 
-		& div.bubble {
-			width: 60%;
-			padding: .5em;
-			margin: .25em;
-			
-			&.user {
-				text-align: right;
-				align-self: end;
-				background-color: darkgoldenrod;
-				border-radius: 12px 12px 0 12px;
-			}
-			&.friend {
-				background-color: cadetblue;
-				border-radius: 12px 12px 12px 0;
-			}
-			&.cmd {
-				background-color: #333;
-				color: orange;
-				text-align: right;
-				align-self: end;
-				border-radius: 12px 12px 0 12px;
-			}
-		}
-	}
+section#ChatWindow {
+	width:100%; 
+	height:100%;
+	border:1px solid grey;
+	display:flex;
+	flex-direction: column;
+	justify-content: end;
+	gap:.5em;
+	overflow: scroll;
 
-	& section#write {
-		position: sticky;
-		bottom:0;
-		width:100%;
+	& div.bubble {
+		width: 60%;
+		padding: .5em;
+		margin: .25em;
 		
-		&  div.input {
-			width:100%;
-			display: grid;	
-			grid-template: 100% / auto 40px 40px;
-			gap: 2px;
-			
-			& input, button {height: 40px;}
+		&.user {
+			text-align: right;
+			align-self: end;
+			background-color: darkgoldenrod;
+			border-radius: 12px 12px 0 12px;
+		}
+		&.friend {
+			background-color: cadetblue;
+			border-radius: 12px 12px 12px 0;
+		}
+		&.cmd {
+			background-color: #333;
+			color: orange;
+			text-align: right;
+			align-self: end;
+			border-radius: 12px 12px 0 12px;
 		}
 	}
+}
 
+section.SmartMessage {
+	position: sticky;
+	bottom:0;
+	width:100%;
+	
+	&  div.input {
+		width:100%;
+		display: grid;	
+		grid-template: 100% / auto 40px 40px;
+		gap: 2px;
+		
+		& input, button {height: 40px;}
+	}
 }

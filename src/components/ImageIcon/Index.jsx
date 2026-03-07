@@ -1,11 +1,11 @@
-import useUser from '../../../contexts/UserContext'
+import useUser from '../../contexts/userContext'
 import * as SVG from '../../assets/svg'
-import '../../.app-config'
+import * as config from '../../.app-config.js'
 import './ImageIcon.css'
 
 
 
-export function ImageIcon(props) {
+export default function ImageIcon(props) {
 	const { user } = useUser();
 	const noImg = '/svg/noimg.svg';
 	let size = props.size || '100%';
@@ -36,7 +36,7 @@ export function ImageIcon(props) {
 	
 	switch (props.role) {
 		case 'profile-photo': {
-			src = user?.photo?.url || defaultProfilePhoto(user);
+			src = user?.photo?.url || config.defaultProfilePhoto(user);
 			istyle = {...istyle, borderRadius:'50%', margin: '0 1%', aspectRatio: '1/1'};
 			dstyle = {...dstyle, display:'inline'};
 		}; break;

@@ -3,7 +3,7 @@ import './App.css'
 import { Routes, Route, Navigate, redirect } from "react-router";
 import { useFetch, useFetchPOST } from './hooks/useFetch'
 import RecursiveMap from './components/RecursiveMap'
-import Chat from './pages/Chat2'
+import Chat from './pages/Chat'
 import { ChatProvider } from './contexts/chatContext'
 import useUser from './contexts/userContext'
 import { ToastContainer, toast } from 'react-toastify';

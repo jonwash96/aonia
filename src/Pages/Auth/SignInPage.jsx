@@ -19,7 +19,7 @@ export default function SignInPage() {
       navigate('/chat');
       console.log("@signin: user", user)
     } catch (err) {
-      setError(err.message || 'Sign in failed');
+      setError(err.error || 'Sign in failed');
     }
   }
 

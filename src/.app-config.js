@@ -13,3 +13,6 @@ export function defaultProfilePhoto(user) {
 		// default: return defaultProfilePhotoAndro;
 	}
 }
+
+
+export const defaultFill = '#ddd'

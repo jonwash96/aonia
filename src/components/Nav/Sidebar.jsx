@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router'
 import useChat from '../../contexts/chatContext'
 import ImageIcon from '../../components/ImageIcon'
 import * as Menus from '../../components/Menus'
+import * as SVG from '../../assets/svg'
+import './Sidebar.css'
 
 export default function Sidebar() {
 
@@ -11,7 +13,7 @@ export default function Sidebar() {
 	const navigate = useNavigate();
 
   return (
-	<nav>
+	<nav id="Sidebar">
 		<section id="pages">
 			<NavMenuItem props={{
 				name: 'hamburger',
@@ -72,16 +74,23 @@ export default function Sidebar() {
 }
 
 
-function NavMenuItem({ children, name='', id='', icon={}, menu={} }) {
+function NavMenuItem({props}) {
+	const { name='', id='', icon={}, menu={} } = props;
+
 	return (
 		<div id={id} className={name+' nav-menu-item-wrapper'}>
-			<ImageIcon props={{ ...icon, size:'40px', options: 'round' }} />
-			{/* <div className="expandable">
+			<ImageIcon 
+				role={icon.role || name}
+				// svg={icon.svg}
+				onClick={icon.onClick}
+				size="45px"
+				options='round'
+			/>
+			<div className="expandable">
 				<ul>
 					<Menus.List props={{ name, ...menu }} />
-					{ ...children }
 				</ul>
-			</div> */}
+			</div>
 		</div>
 	)
 }

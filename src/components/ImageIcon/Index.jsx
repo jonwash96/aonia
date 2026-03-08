@@ -32,7 +32,6 @@ export default function ImageIcon(props) {
 		fontSize: size==='100%' ? 'inherit' : size
 	}
 	if (props.options?.includes('round')) dstyle['borderRadius'] = '50%';
-	if (props.options?.includes('round')) console.log("@HERE", src, content)
 
 	const defaultColor = (v,d) => config.masterFill || v || d || props.fill || config.defaultFill || 'inherit';
 
@@ -48,11 +47,15 @@ export default function ImageIcon(props) {
 			svg =()=> SVG.notificationIcon(size || '25px', defaultColor(), defaultColor());
 			if (props.data == 0) data = null;
 		}; break;
-
-		case 'ellipses': svg =()=> SVG.ellipses(size || '25px', defaultColor(), defaultColor()); break;	
-		case 'hamburger': svg =()=> SVG.hamburgerMenu() || noImg; break;
-		case 'messaging': svg =()=> SVG.messages() || noImg; break;
-		case 'ph': svg =()=> noImg(); break;
+		
+		case 'collections': src = './svg/collections.svg' || noImg; break;
+		// case 'collections': svg =()=> SVG.collectionsIcon	(size || '25px', defaultColor(), defaultColor()) || noImg; break;
+		case 'astronomy': 	svg =()=> SVG.telescopeIcon		(size || '25px', defaultColor(), defaultColor()) || noImg; break;
+		case 'almanac': 	svg =()=> SVG.libraryIcon		(size || '25px', defaultColor(), defaultColor()) || noImg; break;
+		case 'hamburger': 	svg =()=> SVG.hamburgerMenuIcon	(size || '25px', defaultColor(), defaultColor()) || noImg; break;
+		case 'messaging': 	svg =()=> SVG.messagesIcon		(size || '25px', defaultColor(), defaultColor()) || noImg; break;
+		case 'ellipses': 	svg =()=> SVG.ellipses			(size || '25px', defaultColor(), defaultColor()); break;	
+		case 'ph': 			svg =()=> noImg(); break;
 		
 		default: src = (content || svg) ? null : props.src || undefined; !src && (svg =()=> noImg())
 	}

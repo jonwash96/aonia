@@ -2,7 +2,9 @@ import { useNavigate } from 'react-router'
 
 
 
-export default function ChatWindow({ name, messages, chats }) {
+export default function ChatWindow({props}) {
+	const { name, messages, chats } = props;
+	
 	const navigate = useNavigate();
 
 	const bubbleColor = (message) => 

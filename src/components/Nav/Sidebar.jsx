@@ -1,7 +1,15 @@
 import React from 'react'
 import RecursiveMap from '../RecursiveMap'
+import { Link, useNavigate } from 'react-router'
+import useChat from '../../contexts/chatContext'
+import ImageIcon from '../../components/ImageIcon'
+import * as Menus from '../../components/Menus'
 
 export default function Sidebar() {
+
+	const toggleExpanded = () => null;
+	const navigate = useNavigate();
+
   return (
 	<nav>
 		<section id="pages">
@@ -39,7 +47,7 @@ export default function Sidebar() {
 					'&chat': ()=>navigate('/chat'),
 					'&new_chat': ()=>navigate('/chat/new-chat'),
 					'&friends': ()=>navigate('/friends'),
-					'&disconnect%connect': [socket, toggleSocket],
+					// '&disconnect%connect': [socket, toggleSocket],
 				}
 			}}/>
 			<NavMenuItem props={{
@@ -67,13 +75,13 @@ export default function Sidebar() {
 function NavMenuItem({ children, name='', id='', icon={}, menu={} }) {
 	return (
 		<div id={id} className={name+' nav-menu-item-wrapper'}>
-			<ImageIcon2 props={{ ...icon, options: 'round' }} />
-			<div className="expandable">
+			<ImageIcon props={{ ...icon, size:'40px', options: 'round' }} />
+			{/* <div className="expandable">
 				<ul>
 					<Menus.List props={{ name, ...menu }} />
 					{ ...children }
 				</ul>
-			</div>
+			</div> */}
 		</div>
 	)
 }

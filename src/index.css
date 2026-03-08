@@ -112,3 +112,7 @@ ul {
 .dgreen {background-color:var(--dgreen) !important;color:black !important;}
 .sdgreen {background-color:var(--sdgreen) !important;color:black !important;}
 .cwhite {background-color:var(--cwhite) !important;color:black !important;}
+
+/* WELL-KNOWN COLOR-CLASSES */
+.danger {color: 'red';}
+.danger-bg {background-color: 'red';}

@@ -85,3 +85,48 @@ function toOrdered(which=0) {
     if (num == 3) return '3rd'
     return num+'th'
 }
+
+String.prototype._imperialScum = imperialScum;
+Number.prototype._imperialScum = imperialScum;
+function imperialScum(unit='f', units=true, fixed=2, factor=1, both=false) {
+    if (!/\d/g.test(this)) return;
+
+    const num = Number.parseFloat(this);
+    const c = (num - 32) * (5/9) * factor;
+    const f = (((9/5) * num) + 32) * factor;
+    let result;
+    result = /f/i.test(unit) ? f : c;
+    result = both ? [result, num] : result;
+
+    return units 
+        ? Array.isArray(result) 
+            ? result[0] === f ? `${f.toFixed(fixed)}°F  (${result[1].toFixed(fixed)}°C)` : `${c.toFixed(fixed)}°C  (${result[1].toFixed(fixed)}°F)`
+            : result === f ? `${f.toFixed(fixed)}°F` : `${c.toFixed(fixed)}°C`
+        : result
+}
+
+String.prototype._toRoman = toRoman;
+Number.prototype._toRoman = toRoman;
+function toRoman(uppercase=true) {
+    if (!/\d/g.test(this)) return;
+    let num = this;
+    if (num <= 0 || num > 3999) return this;
+
+    const map = [
+        ['M', 1000], ['CM', 900], ['D', 500], ['CD', 400],
+        ['C', 100],  ['XC', 90],  ['L', 50],  ['XL', 40],
+        ['X', 10],   ['IX', 9],   ['V', 5],   ['IV', 4],
+        ['I', 1]
+    ];
+
+    let result = '';
+
+    for (const [letter, value] of map) {
+        while (num >= value) {
+            result += letter;
+            num -= value;
+        }
+    }
+
+    return uppercase ? result : result.toLowerCase();
+}

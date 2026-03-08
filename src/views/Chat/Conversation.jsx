@@ -10,15 +10,14 @@ import ChatWindow from './ChatWindow'
 
 
 
-export default function Conversation() {
-	const { uid, user, destroyCredentials, storeUID } = useUser();
+export default function Conversation({props}) {
+	const { chatSelect, selectChat } = props;
+	const { uid, user, destroyCredentials } = useUser();
 
 	const {	socket,	toggleSocket,	messages,	setMessages,
 			chats,	setChats, 		status, 	setStatus, 
 			deleteChat,	renameChat,	 } = useChat();
 
-	const [cmdHistory, setCmdHistory] = useState([]);
-	const [chatSelect, selectChat] = useState();
 	const navigate = useNavigate();
 
 	const users = chatSelect?.users;
@@ -96,7 +95,7 @@ export default function Conversation() {
 		<main id="Conversation">
 			<header>
 				<ImageIcon 
-					src={user.profile.photo.url} //? Last message not user sender photo
+					src={user.profile.photo.url}
 					role="profile-photo" 
 					size="24px"
 				/>

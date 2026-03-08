@@ -4,6 +4,7 @@ function resolveDot(ctx, text) {
 		return eval(ctx+text.replaceAll('&', '.'))
 	else return text
 }
+
 function e(ctx, content) {
 	if (typeof content !== 'string') return content;
 	if (content.startsWith('eval::')) 
@@ -13,10 +14,11 @@ function e(ctx, content) {
 
 
 
-export function ContentList({ name, items, titles, details, maxLines, icon, user, menu }) {
+export function ContentList({props}) {
+	const { name, items, titles, details, maxLines, icon, user, menu } = props;
 
 	return (
-		<section className={name+'content-list'}>
+		<section className={name+' ContentList'}>
 			{items.map((item, idx) =>
 				<li key={idx} className={name+'-li'}>
 					<ImageIcon 

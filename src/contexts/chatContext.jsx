@@ -23,7 +23,7 @@ export function ChatProvider({ uid, children }) {
 	const [chatEnabled, setChatEnabled] = useState();
 	const [socket, setSocket] = useState();
 	const [status, setStatus] = useState();
-	const [chats, setChats] = useState();
+	const [chats, setChats] = useState([]);
 	const [rooms, setRooms] = useState([]);
 	const [messages, setMessages] = useState([
 		// { text: "Test Message from friend", uid: '123_456A', files: [] },

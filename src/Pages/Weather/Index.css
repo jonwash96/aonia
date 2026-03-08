@@ -1,0 +1,120 @@
+main#Weather {
+	width: 100%;
+	/* height: 100vh; */
+	overflow: hidden;
+	display: grid;
+	grid-template: 
+		"sch	sch		sch		sch		head	head"  1fr
+		"hr		hr 		hr 		hr		head	head"  3fr
+		"data	data 	data	map		map		map"  6fr / 1fr 1fr 1fr 1fr 1fr 1fr;
+
+	border: 1px solid grey;
+	grid-gap: 1em;
+
+	& .Search {grid-area: sch;}
+	& section.hourly {grid-area: hr;}
+	& header.today {grid-area: head;}
+	& section.meteo-table {grid-area: data;}
+	& section.meteo-map {grid-area: map;}
+}
+
+main#Weather div.Search {
+	border: 1px solid cyan;
+
+	& form {
+		width: 100%;
+		display: grid;
+		grid-template: auto / auto 40px;
+	}
+}
+
+main#Weather section.hourly {
+	overflow: hidden;
+	
+	& > .scroll-container {
+		min-width: 100%;
+		min-height: 100%;
+		overflow-x: scroll;
+	}
+	
+	& .flex-container {
+		min-height: 100%;
+		display: flex;
+		gap: 1.5em;
+		flex-wrap: nowrap;
+		width: calc(130px * 7 + 7em);
+		min-width: 100%;
+	}
+}
+
+div.WeatherCard {
+	/* border: 1px solid pink; */
+	background-color: var(--bgb1);
+	padding: 3em 1em;
+	display: inline-block;
+	min-width: max-content;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1em;
+	border-radius: 100px;
+
+	& header {
+		padding: .5em auto;
+		text-align: center;
+	}
+}
+
+main#Weather > header {
+	text-align: right;
+	display:flex;
+	justify-content: end;
+	align-items: center;
+	padding: 1em;
+
+	& h1, & p, & h3, & h4 {margin:0;}
+	
+	& h1 {
+		font-size: 48pt;
+		& .date {font-weight: 100;}
+	}
+
+	& p {
+		font-size: 1.4em;
+		letter-spacing: .2em;
+		color: #f80;
+	}
+}
+
+main#Weather section.meteo-table {
+	/* border: 1px solid magenta; */
+	width: 50vw;
+	height: 50vh;
+	overflow-x: scroll;
+
+	/* & *{border: 1px solid grey;} */
+
+	& td {text-align: center;}
+	& td div.rainspot {text-align: left;}
+	
+	& th {
+		position: sticky;
+		top: 0;
+		background-color: var(--bg);
+		z-index: 1;
+	}
+
+	& td.time {
+		position: sticky;
+		left: 0;
+		background-color: var(--bg);
+	}
+}
+
+main#Weather section.meteo-map {
+	text-align: center;
+
+	& inner-wrapper {
+		width: 80%;
+	}
+}

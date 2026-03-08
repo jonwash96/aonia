@@ -4,6 +4,7 @@ import useChat from '../../contexts/chatContext'
 import useUser from '../../contexts/userContext'
 import { Link, useNavigate } from 'react-router'
 import Conversation from '../../views/Chat/Conversation'
+import ChatsList from '../../views/Chat/ChatsList'
 
 
 
@@ -31,19 +32,12 @@ export default function Chat() {
 
 	return (
 		<main id="Chat">
-		<nav>
-			<strong>Chats: </strong>
-			{chats?.map(chat => <span key={chat._id}>
-				<label htmlFor={chat._id}>
-					{chat.name}
-				</label>
-				<input onChange={(e)=>changeRooms(e.target.id)} 
-				type="radio" name="roomSelect" id={chat._id} 
-				checked={chatSelect === chat._id || false} />
-			</span>)}
-		</nav>
-
-		<Conversation />
+			<ChatsList props={{
+				chatSelect, selectChat
+			}}/>
+			<Conversation props={{
+				chatSelect, selectChat, changeRooms
+			}}/>
 		</main>
 	)
 }

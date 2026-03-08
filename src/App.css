@@ -42,3 +42,8 @@ button:hover { cursor: pointer; }
 
     & li:hover { cursor: pointer; }
 }
+
+main#App {
+    display: grid;
+    grid-template: 100% / 100px auto;
+}

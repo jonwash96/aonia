@@ -7,7 +7,7 @@ import './ImageIcon.css'
 
 export default function ImageIcon(props) {
 	const { user } = useUser();
-	const noImg = '/svg/noimg.svg';
+	const noImg = SVG.noImg;
 	let size = props.size || '100%';
 	let src = props.src || null;
 	let data = props.data || null;
@@ -31,7 +31,10 @@ export default function ImageIcon(props) {
 		...props.tstyle,
 		fontSize: size==='100%' ? 'inherit' : size
 	}
-	if (props.options?.split(' ').includes('round')) dstyle['borderRadius'] = '50%';
+	if (props.options?.includes('round')) dstyle['borderRadius'] = '50%';
+	if (props.options?.includes('round')) console.log("@HERE", src, content)
+
+	const defaultColor = (v,d) => config.masterFill || v || d || props.fill || config.defaultFill || 'inherit';
 
 	
 	switch (props.role) {
@@ -40,30 +43,30 @@ export default function ImageIcon(props) {
 			istyle = {...istyle, borderRadius:'50%', margin: '0 1%', aspectRatio: '1/1'};
 			dstyle = {...dstyle, display:'inline'};
 		}; break;
-
+		
 		case 'notifications': {
-			svg = () => SVG.notificationIcon(size || '25px');
-			if (props.data==0) data = null;
+			svg =()=> SVG.notificationIcon(size || '25px', defaultColor(), defaultColor());
+			if (props.data == 0) data = null;
 		}; break;
 
-		case 'hamburger': svg = () => SVG.hamburgerMenu || noImg; break;
-		case 'messaging': svg = () => SVG.messages || noImg; break;
-		case 'ph': src = noImg; break;
-		default: src = props.src || noImg;
+		case 'ellipses': svg =()=> SVG.ellipses(size || '25px', defaultColor(), defaultColor()); break;	
+		case 'hamburger': svg =()=> SVG.hamburgerMenu() || noImg; break;
+		case 'messaging': svg =()=> SVG.messages() || noImg; break;
+		case 'ph': svg =()=> noImg(); break;
+		
+		default: src = (content || svg) ? null : props.src || undefined; !src && (svg =()=> noImg())
 	}
 
 
-	return(
-		<div 
-			className={`img-icn ${props.role}`} 
-			data={data} 
-			style={dstyle}
-			onClick={onClick}
-		>
+	return (
+		<div className={`img-icn ${props.role}`} 
+			 data={data} 
+			 style={dstyle}
+			 onClick={onClick}>
 			{src 
 				? <img src={src} style={istyle} /> 
-				: <div style={tstyle}>{content || ""}
-			</div>}
+				: <div style={tstyle}>{content || ""}</div>
+			}
 			{svg && svg()}
 		</div>
 	)

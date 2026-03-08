@@ -10,16 +10,16 @@ export function Ellipses(props) {
 			<ImageIcon role="ellipses" size="1em" />
 			<ul>
 				{data.map(([k,v]) => {
-						const title = k.slice(1).replaceAll('_',' ')._toTotleCase();
-						if (title.includes('%')) {
-							const title = title.split('%');
-							return (
-							<li key={k} onClick={v[1]()}>
-								{v[0] ? title[0] : title[1]}
-							</li> )
-						}
-						return <li key={k} onClick={v()}>{title}</li>
+					const title = k.slice(1).replaceAll('_',' ')._toTotleCase();
+					if (title.includes('%')) {
+						const title = title.split('%');
+						return (
+						<li key={k} onClick={v[1]()}>
+							{v[0] ? title[0] : title[1]}
+						</li> )
 					}
+					return <li key={k} onClick={v()}>{title}</li>
+				}
 				)}
 			</ul>
 		</div>

@@ -8,8 +8,11 @@ export default function RecursiveMap({ parent, count, max }) {
 	switch (typeof parent) {
 		case 'object': {
 			if (parent === null) return <div>[null]</div>
-			else if (parent === undefined) return <div>[undefined]</div>
-			else if (Array.isArray(parent)) data = parent
+			else if (typeof parent === undefined) return <div>[undefined]</div>
+			else if (Array.isArray(parent)) {
+				if (parent.length == 0) return <div>[empty array]</div>;
+				data = parent;
+			}
 			else if (isObjectLiteral(parent)) {data = Object.entries(parent); O = true}
 			else return <div>[Unhandled Object Type]</div>
 		} break;
@@ -21,15 +24,19 @@ export default function RecursiveMap({ parent, count, max }) {
 	try {
 		return (
 			<ul>
-				{data.map((datum,idx) =>
+				{data && data.map((datum,idx) =>
 					<li key={idx}>
-						{O && <><strong>{datum[0]}: </strong><br /></>}
-						<RecursiveMap parent={O ? datum[1] : datum} count={count +1}/> 
+						{console.log(datum)}
+						{O && <><strong>{datum[0]._toTitleCase()}: </strong><br /></>}
+						<RecursiveMap 
+							parent={O ? typecheck(datum[1]) : datum} 
+							count={count +1}/> 
 					</li>
 				)}
 			</ul>
 		)
-	} catch {
+	} catch (err) {
+		console.error(err);
 		return (
 		<p className="danger error-text text-red">
 			<i>RecursiveMap error. Please refresh the page or contact the developer.</i>
@@ -42,3 +49,8 @@ function isObjectLiteral(obj) {
 		? obj.constructor.name === 'Object'
 		: false
 };
+
+function typecheck(value) {
+	if (value === undefined) return String("undefined")
+	else if (value === null) return String("null")
+}

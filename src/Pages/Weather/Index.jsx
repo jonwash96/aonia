@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from 'react'
-// import useUser from "../../../contexts/userContext";
+import { useState } from 'react'
+import useUser from "../../../contexts/userContext";
 const SECRET = import.meta.VITE_SECRET;
 import WeatherTable from '../../views/Weather/WeatherTable'
 import { meteodata } from '../../views/Weather/meteodata.js'
@@ -8,7 +8,6 @@ import { weatherData, currentWeather } from '../../views/Weather/weatherdata.js'
 import * as WeatherCards from '../../views/Weather/WeatherCards'
 import * as SVG from '../../assets/svg.jsx'
 import './index.css'
-
 
 
 
@@ -21,10 +20,7 @@ const openweather = {
 
 
 export default function Weather() {
-	// const { uid, user, setUser } = useContext(UserContext);
-	const [openweatherResult, setOpenweatherResult] = useState();
-	const lat = 41.9344183;
-	const lon = -88.3762128;
+	// const { uid, user } = useContext(UserContext);
 	const date = new Date();
 	const [weatherdata, setWeatherdata] = useState(weatherData);
 

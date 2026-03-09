@@ -30,7 +30,6 @@ export default function People() {
 
 
 
-
 	return (
 		<main id="People">
 			<ChatsList props={{

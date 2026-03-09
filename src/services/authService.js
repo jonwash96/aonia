@@ -61,7 +61,7 @@ export async function logout() {
 		return res.status
 
 	} catch (err) {
-		localStorage.removeItem('taonia-oken');
+		localStorage.removeItem('aonia-token');
 		sessionStorage.removeItem('userData');
 		if (localStorage.getItem('aonia-token')) 
 			throw new Error("Sign Out Failed! Please try again later.");

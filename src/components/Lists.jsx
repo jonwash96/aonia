@@ -37,7 +37,7 @@ export function ContentList({props}) {
 				{items.map((item, idx) =>
 					<li key={idx} className={name+'-li'} onClick={()=>onClick('/chat/'+item._id)}>
 						<ImageIcon 
-							src={resolveDot(item, 'item', icon.images) || icon.src || ''} //? This won't work, but whatif e() just returns a callback that performs the logic in place? Or better yet, use 'this'
+							src={resolveDot(item, 'item', icon.images) || icon.src || ''}
 							role={icon.role || ''} 
 							size={icon.size || '24px'}
 							options={icon.options || "round"} 

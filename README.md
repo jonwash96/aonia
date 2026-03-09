@@ -1,16 +1,21 @@
-# React + Vite
+# A O N I A
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+version 0.1.0
+[Web-App Live on Vercel] link loading. . .
+[Check out the Server Repository] link loading. . .
 
-Currently, two official plugins are available:
+Aonia is an app for astrophotographers, implementing various tools to assist in the art, as well as a community and chat feature, enabling collaboration and fostering community.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Version 0.1.0 features hourly weather info and a map, to keep you informed about current conditions, and scope out the best spots.
 
-## React Compiler
+## Information & Technology
+Aonia is a MERN stack app with a RESTful API back end. Several API's are implemented into version 0.1.0, and several more are being implemented to provide the best user experience possible.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+![App Screenshot[(./public/screenshot.png)]]
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Getting Started
+Click the link to visit the url. Once there, You can sign up for an acount. Make sure to follow the guidelines for creating a valid user account. Once you're authorized, you can view the app. The app does not authenticate emails at this time, so if you'd like to stay informed about updates in its development, please return here to follow the project, or contact the developer for more information.
+
+For the curious minds, It's a mountain on Mars, named after an ancient Greek City known for its Muses.

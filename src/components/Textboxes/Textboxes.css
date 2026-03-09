@@ -1,6 +1,5 @@
 section.Search {
 	& input {
-		/* width:100%; */
 		background-color: #0248;
 		padding: 12px;
 		border-radius: 8px 0 0 8px;

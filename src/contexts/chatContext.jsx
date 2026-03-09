@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 import useUser from './userContext'
-import { ToastContainer, toast } from 'react-toastify';
 import * as userService from '../services/userService.js'
 import { useNavigate } from 'react-router'
 const BACK_END_URL = import.meta.env.VITE_BACK_END_URL;
@@ -87,12 +86,14 @@ export function ChatProvider({ uid, children }) {
 			await delay(100);
 			
 			setSocket (io(serverStatus.url, { 
-				query: { uid, token: tokenized, chatInfo: {id: null, latest: chats?.messages?.at(-1).time || null} },
+				query: { uid, token: tokenized, 
+					chatInfo: {id: null, latest: chats?.messages?.at(-1).time || null} },
 			}));
 
 		}; chatService();
 	},[chatEnabled]);
 
+	
 
 	if (socket) {
 		socket.on('connect', () => {
@@ -138,11 +139,11 @@ export function ChatProvider({ uid, children }) {
 
 	return (
 		<ChatContext.Provider value={{
-			socket, toggleSocket,
-			messages, setMessages,
-			chats, setChats,
-			rooms, setRooms,
-			status, setStatus,
+			socket, 	toggleSocket,
+			messages, 	setMessages,
+			chats, 		setChats,
+			rooms, 		setRooms,
+			status, 	setStatus,
 			deleteChat, renameChat
 		}}>
 			{socket

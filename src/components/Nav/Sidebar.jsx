@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import RecursiveMap from '../RecursiveMap'
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import useChat from '../../contexts/chatContext'
 import ImageIcon from '../ImageIcon'
 import * as Menus from '../Menus'
@@ -10,7 +8,6 @@ import './Sidebar.css'
 
 
 export default function Sidebar() {
-	const toggleExpanded = () => null;
 	const navigate = useNavigate();
 
 
@@ -23,7 +20,7 @@ export default function Sidebar() {
 				name: 'hamburger',
 				icon: {
 					role: 'hamburger',
-					onClick: toggleExpanded
+					onClick: ()=>navigate('/')
 				},
 				menu: {
 					'&home': ()=>navigate('/'),
@@ -31,6 +28,7 @@ export default function Sidebar() {
 					'&settings': ()=>navigate('/settings'),
 				}
 			}}/>
+
 			<NavMenuItem props={{
 				name: 'astronomy',
 				icon: {
@@ -43,6 +41,7 @@ export default function Sidebar() {
 					'&almanac': ()=>navigate('/almanac')
 				}
 			}}/>
+
 			<NavMenuItem props={{
 				name: 'weather',
 				icon: {
@@ -53,6 +52,7 @@ export default function Sidebar() {
 					'&weather': ()=>navigate('/weather')
 				}
 			}}/>
+
 			<NavMenuItem props={{
 				name: 'chat',
 				icon: {
@@ -66,6 +66,7 @@ export default function Sidebar() {
 					// '&disconnect%connect': [socket, toggleSocket],
 				}
 			}}/>
+
 			<NavMenuItem props={{
 				name: 'collections',
 				icon: {
@@ -79,6 +80,7 @@ export default function Sidebar() {
 					'&new_collection': ()=>navigate('/collections/new')
 				} 
 			}}/>
+
 		</section>
 		<section className="more">
 			<NavMenuItem props={{
@@ -112,7 +114,6 @@ function NavMenuItem({props}) {
 				onClick={icon.onClick}
 				size="45px"
 				options='round'
-				// dstyle={{ background: 'linear-gradient(to top left, var(--sdblue), var(--steelblue))'}}
 			/>
 			<div className="expandable">
 				<Menus.List props={{ name, ...menu }} />

@@ -30,7 +30,6 @@ main#ChatList {
 			margin-bottom: .5em;
 			background-color: var(--sdblue);
 			border-radius: 6px;
-			/* border: .5px solid var(--bgf2); */
 			
 			& div.text-block {
 				display: flex;

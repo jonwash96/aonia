@@ -90,7 +90,8 @@ export default function Conversation({props}) {
 		
 	};
 
-//messages[0] ? friends[friends.findIndex(u => u._id === messages?.at(-1).uid)].photo.url : 
+
+	
 	return (
 		<main id="Conversation">
 			<header>

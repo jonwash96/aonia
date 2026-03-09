@@ -60,28 +60,4 @@ button:hover { cursor: pointer; }
         background-color: var(--bgf1);
     }
 }
-
-/* body {
-    background: linear-gradient(-45deg, #E73C7E, var(--dblue), var(--mblue) , #23D5AB);
-    background-size: 400% 400%;
-    animation: gradientShift 60s ease infinite;
-}
-
-@keyframes gradientShift {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
-} */
-
-/* body {
-    background: linear-gradient(-45deg, var(--steelblue), var(--midnight), #23D5AB);
-    background-size: 400% 400%;
-    animation: gradientShift 60s ease infinite;
-}
-
-@keyframes gradientShift {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
-} */
   

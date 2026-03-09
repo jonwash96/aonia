@@ -63,7 +63,7 @@ export async function update(uid, updateInfo) {
 }
 
 
-export async function getUserItem(uid, item, limit=10) {
+export async function getUserItem(query) {
     try {
         const q = query ? '?q='+query : '';
 

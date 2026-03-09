@@ -38,7 +38,10 @@ export default function ChatsList({props}) {
 		setView(false);
 	};
 
-	const handleSubmit = (e) => null;
+	const handleSubmit = (e) => {
+		e.preventDefault()
+		users?.filter(u => u.username === input);
+	}
 
 
 	return (

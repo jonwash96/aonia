@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import useUser from "../../../contexts/userContext";
 const SECRET = import.meta.VITE_SECRET;
 import WeatherTable from '../../views/Weather/WeatherTable'
 import { meteodata } from '../../views/Weather/meteodata.js'

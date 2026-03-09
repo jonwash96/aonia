@@ -28,7 +28,7 @@ export default function ImageIcon(props) {
 	}
 	if (props.options?.includes('round')) dstyle['borderRadius'] = '50%';
 
-	const defaultColor = (v,d) => config.masterFill || v || d || props.fill || config.defaultFill || 'inherit';
+	const defaultColor = (v,d) =>  v || d || props.fill || config.defaultFill || 'inherit';
 
 
 	let svg = props.svg ? typeof props.svg === 'string' 

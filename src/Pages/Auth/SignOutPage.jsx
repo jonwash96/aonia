@@ -1,24 +1,30 @@
 import { useEffect, useContext } from 'react'
-import { signOut } from '../../services/authService'
-import { errToast } from '../../utils/gizmos'
+import { logout } from '../../services/authService'
 import { useNavigate } from 'react-router'
-import { UserContext } from "../../contexts/UserContext";
+import useUser from "../../contexts/userContext";
+
+
 
 export default function SignOutPage() {
-	const { setUser, setAuthToken } = useContext(UserContext);
+	const { setUser, setAuthToken } = useUser();
 	const navigate = useNavigate();
+
+
 	useEffect(() => {
 		(async () => {
 			try {
-				await signOut();
+				await logout();
 				setUser(null)
 				setAuthToken(null)
 				navigate('/');
 			} catch (err) {
-				errToast()
+				console.eror(err)
 			}
 		})()
 	},[])
+
+
+
   return (
 	<p>Loading...</p>
   )

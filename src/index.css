@@ -18,7 +18,7 @@
         --secondary: #1a1a1a;
         --tertiary: #888;
         --tertiary-op: #777;
-        --brand-key: #DDF734;
+        --brand-key: #fff34b;
         --brand-base-slight: #bCe1Ff;
         --brand-base-light: #86A6CF;
         --brand-base: #344050;
@@ -44,7 +44,7 @@
         --secondary-op: #444;
         --tertiary: #888;
         --tertiary-op: #777;
-        --brand-key: #DDF734;
+        --brand-key: #fff34b;;
         --brand-base: #344050;
         --brand-base-slight: #bCe1Ff;
         --brand-base-light: #86A6CF;
@@ -66,17 +66,20 @@ ul {
     --cwhite: #cded;
     --lsteelblue: #406c8f;
     --steelblue: #003c5f;
+    --dsteelblue: #001f3f;
     --lcyan: #80caff;
     --cyan: rgb(0, 195, 255);
     --dustycyan: rgb(100, 175, 205);
     --green: #0fc;
     --dgreen: #0c9;
     --sdgreen: #096;
+    --slgold: #fe8;
     --lgold: #fff34b;
     --gold: #f9c31b;
     --dgold: #c9a300;
     --sdgold: #996306;
     --lblue: #37f;
+    --midblue: #08f;
     --blue: #13f;
     --mblue: #36f;
     --dblue: #102164;

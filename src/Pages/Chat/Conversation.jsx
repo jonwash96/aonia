@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router'
 import ImageIcon from '../../components/ImageIcon'
 import * as Menus from '../../components/Menus'
 import * as Lists from '../../components/Lists'
-import * as Textboxes from '../../components/Textboxes'
+import * as Textboxes from '../../components/Textboxes/Textboxes'
 import ChatWindow from './ChatWindow'
 
 
@@ -21,7 +21,7 @@ export default function Conversation({props}) {
 	const navigate = useNavigate();
 
 	const users = chatSelect?.users;
-	const friends = user.profile.friends;
+	const friends = user.profile?.friends || undefined;
 
 
 	const newChat = () => {
@@ -46,18 +46,8 @@ export default function Conversation({props}) {
 	}};
 
 	const handleSubmit = (input) => {
-		if (input.text === '') return console.log("No input");
-		console.log(input);
-
 		const newMessage = { ...input, uid: uid, session: (user?.session || socket.id) };
 		setMessages(prev => [ ...prev, newMessage ]);
-
-		if (input.text.startsWith('/')) {
-			setCmdHistory(prev => [ ...prev, { 
-				...newMessage, 
-				prevNode: cmdHistory.length === 0 ? 0 : cmdHistory.length -1, 
-				nextNode: cmdHistory.length +1 } ])
-		};
 
 		//* DEV MODE //
 		if (input.text==='/clear') {
@@ -90,7 +80,7 @@ export default function Conversation({props}) {
 		
 	};
 
-//messages[0] ? friends[friends.findIndex(u => u._id === messages?.at(-1).uid)].photo.url : 
+
 	return (
 		<main id="Conversation">
 			<header>

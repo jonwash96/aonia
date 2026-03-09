@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router'
 import ImageIcon from '../../components/ImageIcon'
 import * as Menus from '../../components/Menus'
 import * as Lists from '../../components/Lists'
-import * as Textboxes from '../../components/Textboxes'
+import * as Textboxes from '../../components/Textboxes/Textboxes'
 
 
 

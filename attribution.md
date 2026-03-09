@@ -27,3 +27,24 @@ UPLOADER: SVG Repo
 COLLECTION: Software Mansion Broken Icons
 LICENSE: MIT License
 AUTHOR: Software Mansion
+
+## Up Arrow SVG
+![up arrow](/./public/svg/uparrow_basic.svg)
+[SVGREPO](https://www.svgrepo.com/svg/114622/up-arrow)
+COLLECTION: Airline Icon Collection
+LICENSE: CC0 License
+UPLOADER: SVG Repo
+
+## Weather Sillhouette SVG
+![weather icon](./public/weatherIcon.svg)
+[SVGREPO](https://www.svgrepo.com/svg/451953/weather-few-clouds)
+COLLECTION: Adwaita Tiny Circular Icons
+LICENSE: GPL License
+AUTHOR: GNOME
+
+## Menu Circle SVG Vector
+![Menu Circle SVG Vector](./public/circleHamburger.svg)
+[Menu Circle SVG Vector](https://www.svgrepo.com/svg/408908/menu-circle)
+COLLECTION: Micons Interface Icons
+LICENSE: CC Attribution License
+AUTHOR: Cosmin Negoita

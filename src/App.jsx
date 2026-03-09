@@ -5,13 +5,14 @@ import { useFetch, useFetchPOST } from './hooks/useFetch'
 import Chat from './pages/Chat'
 import { ChatProvider } from './contexts/chatContext'
 import useUser from './contexts/userContext'
-import { ToastContainer, toast } from 'react-toastify'
 import AWS from './components/AWS'
-import SignInPage from './pages/Auth/SignInPage'
 import './utils/bancroft-proto'
 import Weather from './pages/Weather'
 import Sidebar from './components/Nav/Sidebar'
-
+import People from './pages/People'
+import SignInPage from './pages/Auth/SignInPage'
+import SignUpPage from './pages/Auth/SignUpPage'
+import SignOutPage from './pages/Auth/SignOutPage'
 
 
 const SECRET = import.meta.VITE_SECRET;
@@ -35,29 +36,51 @@ function App() {
 
 	return (
 		<main id="App">
-			<ChatProvider uid={uid}>
-				<Sidebar />
-			</ChatProvider>
+			<Sidebar />
 
 			<Routes>
 				<Route
-					path="/"
+					path="/login"
 					element={<SignInPage />}
 				/>
+				
+				<Route
+					path="/sign-up"
+					element={<SignUpPage />}
+				/>
+				
+				<Route
+					path="/logout"
+					element={<SignOutPage />}
+				/>
+				
+
+				<Route
+					path="/"
+					element={<Weather />}
+				/>
+
 
 				<Route
 					path="/chat"
 					element={
 						<ChatProvider uid={uid}>
 							<Chat />
-						</ChatProvider>
-					} />
+						</ChatProvider>}
+				/>
+				<Route path="chat/:id" element={<Chat />} />
 				
+
 				<Route
 					path="/weather"
-					element={
-							<Weather />
-					} />
+					element={<Weather />}
+				/>
+
+
+				<Route 
+					path="users/profile" 
+					element={<People />} 
+				/>
 			</Routes>
 
 		</main>

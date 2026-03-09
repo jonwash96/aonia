@@ -2,15 +2,15 @@ import { useState } from 'react'
 import './index.css'
 import useChat from '../../contexts/chatContext'
 import useUser from '../../contexts/userContext'
-import { Link, useNavigate } from 'react-router'
-import Conversation from '../../views/Chat/Conversation'
-import ChatsList from '../../views/Chat/ChatsList'
+import { Link, useNavigate, useParams } from 'react-router'
+import Conversation from './Conversation'
+import ChatsList from './ChatsList'
 
 
 
 export default function Chat() {
 	const { uid, user, destroyCredentials, storeUID } = useUser();
-	const { chatSocket:socket,	messages,	setMessages,
+	const { socket,	messages,	setMessages,
 			chats, setChats, 	status, 	setStatus } = useChat();
 	const defaultState = { text: '', files: [], color:'inherit' };
 	const [input, setInput] = useState(defaultState);
@@ -18,15 +18,12 @@ export default function Chat() {
 	const [cmdHistory, setCmdHistory] = useState([]);
 	const navigate = useNavigate();
 
+	const { id } = useParams();
+
 
 	const changeRooms = (convoID) => {
 		selectChat(convoID);
 		socket.emit('join-room', uid, convoID);
-	};
-
-	const handleChange = (et) => {
-		const inputColor = et.value.startsWith('/') ? '#0bf' : 'inherit';
-		setInput(prev => ({ ...prev, [et.name]: et.value, color: inputColor }));
 	};
 
 

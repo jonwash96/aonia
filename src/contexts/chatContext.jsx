@@ -2,9 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
 import useUser from './userContext'
 import { ToastContainer, toast } from 'react-toastify';
+import * as userService from '../services/userService.js'
+import { useNavigate } from 'react-router'
 const BACK_END_URL = import.meta.env.VITE_BACK_END_URL;
 const BACK_END_PORT = import.meta.env.VITE_BACK_END_PORT;
 const CHAT_PORT = import.meta.env.VITE_CHATPORT;
+
 const delay = async (time) => await new Promise(geaux => 
 	setTimeout(()=>geaux(), time));
 
@@ -19,16 +22,17 @@ export default function useChat() {
 
 
 export function ChatProvider({ uid, children }) {
-	const { setUser, authToken } = useUser();
+	const { user, setUser, authToken } = useUser();
 	const [chatEnabled, setChatEnabled] = useState();
 	const [socket, setSocket] = useState();
 	const [status, setStatus] = useState();
 	const [chats, setChats] = useState([]);
 	const [rooms, setRooms] = useState([]);
 	const [messages, setMessages] = useState([
-		// { text: "Test Message from friend", uid: '123_456A', files: [] },
-		// { text: "Test Message from user", uid: uid, files: [] },
+		{ text: "Test Message from friend", uid: '123_456A', files: [] },
+		{ text: "Test Message from user", uid: uid, files: [] },
 	]);
+	const navigate = useNavigate();
 
 	const toggleSocket =()=> setSocket(!socket);
 
@@ -54,10 +58,18 @@ export function ChatProvider({ uid, children }) {
 
 
 	useEffect(() => {
-		// if (!chatEnabled) return;
+		if (!chatEnabled) return;
 
 		async function chatService() {
 			console.log("@ChatProvider > Enable Chat. uid", uid);
+
+			if (!user.profile?.photo || user.profile?.friends) {
+				const fullyPopulatedUser = await userService.getUserData(uid, 'profile');
+				if (!fullyPopulatedUser) return navigate('/logout');
+				setUser(fullyPopulatedUser);
+				await delay(200);
+			}
+
 			const tokenized = localStorage.getItem('aonia-token');
 
 			let serverStatus = await fetch(BACK_END_URL+':'+BACK_END_PORT+'/chat/', {
@@ -79,7 +91,7 @@ export function ChatProvider({ uid, children }) {
 			}));
 
 		}; chatService();
-	}, []);
+	},[chatEnabled]);
 
 
 	if (socket) {
@@ -135,7 +147,8 @@ export function ChatProvider({ uid, children }) {
 		}}>
 			{socket
 				? children
-				: <p>Initializing Chat. . .</p>
+				: (<><button onClick={()=>setChatEnabled(true)}>Enable</button>
+				   </>)
 			}
 		</ChatContext.Provider>
 	)

@@ -1,20 +1,24 @@
-import React from 'react'
+import { useState } from 'react'
 import RecursiveMap from '../RecursiveMap'
 import { Link, useNavigate } from 'react-router'
 import useChat from '../../contexts/chatContext'
-import ImageIcon from '../../components/ImageIcon'
-import * as Menus from '../../components/Menus'
+import ImageIcon from '../ImageIcon'
+import * as Menus from '../Menus'
 import * as SVG from '../../assets/svg'
 import './Sidebar.css'
 
-export default function Sidebar() {
 
+
+export default function Sidebar() {
 	const toggleExpanded = () => null;
 	const navigate = useNavigate();
 
+
+
   return (
 	<nav id="Sidebar">
-		<section id="pages">
+		<section className="pages">
+		<p className="logotype">AONIA</p>
 			<NavMenuItem props={{
 				name: 'hamburger',
 				icon: {
@@ -31,7 +35,7 @@ export default function Sidebar() {
 				name: 'astronomy',
 				icon: {
 					svg: '&astronomyIcon',
-					onClick: ()=>navigate('/astronomy')
+					onClick: ()=>navigate('/')
 				},
 				menu: {
 					'&astronomy': ()=>navigate('/astronomy'),
@@ -40,10 +44,20 @@ export default function Sidebar() {
 				}
 			}}/>
 			<NavMenuItem props={{
+				name: 'weather',
+				icon: {
+					svg: '&weatherIcon',
+					onClick: ()=>navigate('/weather')
+				},
+				menu: {
+					'&weather': ()=>navigate('/weather')
+				}
+			}}/>
+			<NavMenuItem props={{
 				name: 'chat',
 				icon: {
 					role: 'messaging',
-					onClick: ()=>navigate('/chat')
+					onClick: ()=>navigate('/')
 				},
 				menu: {
 					'&chat': ()=>navigate('/chat'),
@@ -56,7 +70,7 @@ export default function Sidebar() {
 				name: 'collections',
 				icon: {
 					svg: '&collectionsIcon',
-					onClick: ()=>navigate('/collections')
+					onClick: ()=>navigate('/')
 				},
 				menu: {
 					'&collections': ()=>navigate('/collections'),
@@ -66,9 +80,20 @@ export default function Sidebar() {
 				} 
 			}}/>
 		</section>
-		<div className="more">
-			<p className="logotype">AONIA</p>
-		</div>
+		<section className="more">
+			<NavMenuItem props={{
+				name: 'people',
+				icon: {
+					role: 'profile-photo',
+					onClick: ()=>navigate('/people')
+				},
+				menu: {
+					'&profile': ()=>navigate('/profile'),
+					'&friends': ()=>navigate('/friends'),
+					'&Astramuse': ()=>navigate('/astramuse')
+				} 
+			}}/>
+		</section>
 	</nav>
   )
 }
@@ -77,19 +102,20 @@ export default function Sidebar() {
 function NavMenuItem({props}) {
 	const { name='', id='', icon={}, menu={} } = props;
 
+
 	return (
 		<div id={id} className={name+' nav-menu-item-wrapper'}>
 			<ImageIcon 
 				role={icon.role || name}
-				// svg={icon.svg}
+				svg={icon.svg}
+				fill="var(--slgold)"
 				onClick={icon.onClick}
 				size="45px"
 				options='round'
+				// dstyle={{ background: 'linear-gradient(to top left, var(--sdblue), var(--steelblue))'}}
 			/>
 			<div className="expandable">
-				<ul>
-					<Menus.List props={{ name, ...menu }} />
-				</ul>
+				<Menus.List props={{ name, ...menu }} />
 			</div>
 		</div>
 	)

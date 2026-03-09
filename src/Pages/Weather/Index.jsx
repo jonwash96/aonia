@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from 'react'
 const SECRET = import.meta.VITE_SECRET;
 import WeatherTable from '../../views/Weather/WeatherTable'
 import { meteodata } from '../../views/Weather/meteodata.js'
-import * as Textboxes from '../../components/Textboxes'
+import * as Textboxes from '../../components/Textboxes/Textboxes'
 import { weatherData, currentWeather } from '../../views/Weather/weatherdata.js'
 import * as WeatherCards from '../../views/Weather/WeatherCards'
 import * as SVG from '../../assets/svg.jsx'
@@ -42,7 +42,7 @@ export default function Weather() {
 			onSubmit: onSubmit,
 			data: [],
 			placeholder: "Data Provided by OpenWeather API",
-			button: true
+			icon: true
 		}}/>
 
 		<section class="hourly">

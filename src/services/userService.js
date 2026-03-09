@@ -1,4 +1,4 @@
-import '../utils/handleJSONResponse.js'
+import handleJSONResponse from '../utils/handleJSONResponse.js'
 const API_URL = (import.meta.env.VITE_BACK_END_SERVER_URL || "http://localhost:3443")
 const BASE_URL = `${API_URL}/users`
 

@@ -4,11 +4,13 @@ import * as authService from '../../services/authService';
 import useUser from '../../contexts/userContext'
 import './Auth.css'
 
+
+
 export default function SignInPage() {
   const navigate = useNavigate();
   const { uid, user, setUser, destroyUID } = useUser();
-  const [username, setUsername] = useState('cadmus');
-  const [password, setPassword] = useState('squid');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
@@ -16,19 +18,18 @@ export default function SignInPage() {
     try {
       const user = await authService.login({ username, password });
       setUser(user);
-      navigate('/chat');
+      navigate('/');
       console.log("@signin: user", user)
     } catch (err) {
       setError(err.error || 'Sign in failed');
     }
   }
 
+
+
   return (
     <main id="auth">
       <div className="inner-wrapper">
-        <section className="graphic">
-          $
-        </section>
 
         <section className="form">
           <Link to="/" className="exit"><div>X</div></Link>

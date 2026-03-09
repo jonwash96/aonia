@@ -26,7 +26,6 @@ export default function RecursiveMap({ parent, count, max }) {
 			<ul>
 				{data && data.map((datum,idx) =>
 					<li key={idx}>
-						{console.log(datum)}
 						{O && <><strong>{datum[0]._toTitleCase()}: </strong><br /></>}
 						<RecursiveMap 
 							parent={O ? typecheck(datum[1]) : datum} 

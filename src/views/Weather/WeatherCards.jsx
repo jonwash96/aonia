@@ -8,8 +8,21 @@ export function Day({props}) {
 	<div className="WeatherCard">
 		<header>{name}</header>
 		<ImageIcon role="ph" />
-		<div className="high">🔼 {cfk(high, 'k', 'f')}</div>
-		<div className="low">🔽 {cfk(low, 'k', 'f')}</div>
+		<div className="high">
+			<ImageIcon 
+			svg="&uparrow_basic" 
+			size="11pt" 
+			dstyle={{display: 'inline'}} 
+			fill={'var(--lred)'}/>
+			{cfk(high, 'k', 'f')}
+		</div>
+		<div className="low">
+			<ImageIcon svg="&uparrow_basic" 
+				size="11pt" 
+				dstyle={{display: 'inline-block', rotate: '180deg'}} 
+				fill={'var(--midblue'}/>
+			{cfk(low, 'k', 'f')}
+			</div>
 		<div className="temp">🌡️ {cfk(temp, 'k', 'f')}</div>
 	</div>
   )

@@ -10,9 +10,9 @@ import './utils/bancroft-proto.js'
 import Weather from './pages/Weather'
 import Sidebar from './components/Nav/Sidebar.jsx'
 // import People from './pages/People'
-import SignInPage from './pages/Auth/SignInPage.jsx'
-import SignUpPage from './pages/Auth/SignUpPage.jsx'
-import SignOutPage from './pages/Auth/SignOutPage.jsx'
+import Login from './pages/Auth/Login.jsx'
+import Register from './pages/Auth/Register.jsx'
+import Logout from './pages/Auth/Logout.jsx'
 
 
 // const SECRET = import.meta.VITE_SECRET;
@@ -35,17 +35,17 @@ function App() {
 			<Routes>
 				<Route
 					path="/login"
-					element={<SignInPage />}
+					element={<Login />}
 				/>
 				
 				<Route
-					path="/sign-up"
-					element={<SignUpPage />}
+					path="/register"
+					element={<Register />}
 				/>
 				
 				<Route
 					path="/logout"
-					element={<SignOutPage />}
+					element={<Logout />}
 				/>
 				
 

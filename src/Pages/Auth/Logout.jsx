@@ -5,7 +5,7 @@ import useUser from "../../contexts/userContext";
 
 
 
-export default function SignOutPage() {
+export default function Logout() {
 	const { setUser, setAuthToken } = useUser();
 	const navigate = useNavigate();
 

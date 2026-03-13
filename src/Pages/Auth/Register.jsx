@@ -6,7 +6,7 @@ import './Auth.css'
 
 
 
-export default function SignUpPage() {
+export default function Register() {
   const { setUser } = useUser();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');

@@ -6,7 +6,7 @@ import './Auth.css'
 
 
 
-export default function SignInPage() {
+export default function Login() {
   const navigate = useNavigate();
   const { uid, user, setUser, destroyUID } = useUser();
   const [username, setUsername] = useState('');
@@ -59,7 +59,7 @@ export default function SignInPage() {
             <button type="submit">Sign In</button>
           </form>
 
-          <p>Don't have an account? <Link to="/sign-up">Sign Up</Link></p>
+          <p>Don't have an account? <Link to="/register">Sign Up</Link></p>
         </section>
       </div>
     </main>

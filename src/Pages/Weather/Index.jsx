@@ -1,12 +1,14 @@
+import './index.css'
 import { useState } from 'react'
 const SECRET = import.meta.VITE_SECRET;
+import { Link } from 'react-router'
 import WeatherTable from './WeatherTable'
 import { meteodata } from './meteodata.js'
 import * as Textboxes from '../../components/Textboxes/Textboxes'
 import { weatherData, currentWeather } from './weatherdata.js'
 import * as WeatherCards from './WeatherCards'
 import * as SVG from '../../assets/svg.jsx'
-import './index.css'
+import useUser from '../../contexts/userContext.jsx'
 
 
 
@@ -19,7 +21,7 @@ const openweather = {
 
 
 export default function Weather() {
-	// const { uid, user } = useContext(UserContext);
+	const { uid, user } = useUser();
 	const date = new Date();
 	const [weatherdata, setWeatherdata] = useState(weatherData);
 
@@ -39,6 +41,13 @@ export default function Weather() {
 			placeholder: "Data Provided by OpenWeather API",
 			icon: true
 		}}/>
+
+		<section id="user">
+			{user 
+				? <span>Welcome, {user.displayname}</span>
+				: <><Link to="/login">Login</Link><Link to="/register">Sign up</Link></>
+			}
+		</section>
 
 		<section className="hourly">
 			<h3>Hourly Forecast</h3>

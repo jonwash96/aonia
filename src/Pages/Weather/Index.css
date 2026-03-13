@@ -4,13 +4,14 @@ main#Weather {
 	overflow: hidden;
 	display: grid;
 	grid-template: 
-		"sch	sch		sch		sch		head	head"  1fr
-		"hr		hr 		hr 		hr		head	head"  3fr
-		"data	data 	data	map		map		map"  6fr / 1fr 1fr 1fr 1fr 1fr 1fr;
+		"sch	sch		sch		sch		user	user"  1fr
+		"hr		hr 		hr 		hr		head	head"  5fr
+		"data	data 	data	map		map		map"  8fr / 1fr 1fr 1fr 1fr 1.5fr 1.5fr;
 
 	grid-gap: 1em;
 
 	& .Search {grid-area: sch;}
+	& section#user {grid-area: user;}
 	& section.hourly {grid-area: hr;}
 	& header.today {grid-area: head;}
 	& section.meteo-table {grid-area: data;}
@@ -25,6 +26,12 @@ main#Weather div.Search {
 
 		& input {width: 100px;}
 	}
+}
+
+main#Weather section#user {
+	display: flex;
+	gap: 1em;
+	justify-content: end;
 }
 
 main#Weather section.hourly {

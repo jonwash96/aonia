@@ -1,7 +1,7 @@
 import useUser from '../../contexts/userContext.jsx'
 import * as SVG from '../../assets/svg.jsx'
 import * as config from '../../.app-config.js'
-import './ImageIcon.css'
+import './index.css'
 
 
 

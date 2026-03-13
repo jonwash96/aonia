@@ -1,10 +1,10 @@
 import { useState } from 'react'
 const SECRET = import.meta.VITE_SECRET;
-import WeatherTable from '../../views/Weather/WeatherTable'
-import { meteodata } from '../../views/Weather/meteodata.js'
+import WeatherTable from './WeatherTable'
+import { meteodata } from './meteodata.js'
 import * as Textboxes from '../../components/Textboxes/Textboxes'
-import { weatherData, currentWeather } from '../../views/Weather/weatherdata.js'
-import * as WeatherCards from '../../views/Weather/WeatherCards'
+import { weatherData, currentWeather } from './weatherdata.js'
+import * as WeatherCards from './WeatherCards'
 import * as SVG from '../../assets/svg.jsx'
 import './index.css'
 
@@ -40,12 +40,12 @@ export default function Weather() {
 			icon: true
 		}}/>
 
-		<section class="hourly">
+		<section className="hourly">
 			<h3>Hourly Forecast</h3>
 			<div className="scroll-container">
 				<div className="flex-container">
-					{weatherdata && weatherdata?.list.map(datum =>
-						<WeatherCards.Day props={{
+					{weatherdata && weatherdata?.list.map((datum,idx) =>
+						<WeatherCards.Day key={idx} props={{
 							name: new Date(datum.dt).toDateString().substring(0,4),
 							img: SVG.weather.get(datum.clouds.all),
 							high: datum.main.temp_min,

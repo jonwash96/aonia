@@ -127,8 +127,8 @@ export const weatherIcon = (size='1em', fill='#ddd') => { return (
 
 export const circleHBIcon = (size='1em', fill='#ddd') => { return (
 	/** Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools */
-	<svg width={size} height={size} fill={fill} version="1.1" id="Layer_1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	<svg width={size} height={size} fill={fill} version="1.1" id="Layer_1"
+	 xmlns="http://www.w3.org/2000/svg"
 	 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
 	<g>
 		<path d="M12,24C5.4,24,0,18.6,0,12S5.4,0,12,0s12,5.4,12,12S18.6,24,12,24z M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10 S17.5,2,12,2z"/>

@@ -39,12 +39,27 @@ export function UserProvider({ children }){
 			setUser(null);
 			setAuthToken(null);
 		}
-	}
+	};
+
+	const findFriends = (query, option) => {
+		const findOne = (q) => {
+			switch (option) {
+				case 'byUsername': return user.profile.friends.find(f => f.username === q); break;
+				case 'byDisplayname': return user.profile.friends.find(f => f.displayname === q); break;
+				case 'byID':
+				default: return user.profile.friends.find(f => f._id === q); break;
+			}	};
+	return Array.isArray(query) 
+		? query.map(q => findOne(q))
+		: findOne(query);
+	};
     
     return <UserContext.Provider value={{ 
-		uid: user?._id || null, user, setUser, 
+		uid: user?._id || null, 
+		user, setUser, 
 		authToken, setAuthToken,
 		destroyCredentials,
+		findFriends,
 		JITAuth: getUserFromToken
 	}}>
         {children}

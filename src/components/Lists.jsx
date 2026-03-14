@@ -6,25 +6,37 @@ import * as Menus from './Menus'
 export function ContentList({props}) {
 	const { name, items, titles, details, maxLines, icon, user, menu, defaultMessage, onClick } = props;
 
-	const resolveDot = (item, ctx, text) => {
-		if (!text) return;
-		if (text.startsWith('&')) 
-			return eval(ctx+text.replaceAll('&', '.'))
-		
-		else if (typeof text === 'string') {
-			if (text.match(/&\{.+\}/g)) {
-				let x = text.match(/(?<=&\{).+(?=\})/g)[0];
-				x = eval(ctx+x);
-				v = text.replace(/&\{.+\}/g. x);
-		}};
-		if (Array.isArray(text)) {
-			if (text[1].match(/&\{.+\}/g)) {
-				let x = text[1].match(/(?<=&\{).+(?=\})/g)[0];
-				x = eval(ctx+x);
-				return () => text[0](v.replace(/&\{.+\}/g, x));
+	const resolveDot = (ctx, text) => {
+		if (typeof text === 'function') return text;
+		try {
+			const evalMidst = (str) => eval('ctx' + str.match(/(?<=&\{).+(?=\})/g)[0]);
+
+			if (!text) return;
+			
+			if (typeof text === 'string') {
+				if (text.startsWith('&')) 
+					return eval('ctx'+text.replace('&', '.'))
+
+				else if (text.match(/&\{.+\}/g)) {
+					const x = evalMidst(text);
+					return text.replace(/&\{.+\}/g, x);
+			}}
+			else if (Array.isArray(text)) {
+				const x = text.slice(1).map(i => 
+					i.startsWith('&')
+						? eval(i.replace('&', 'ctx.'))
+						: i.match(/&\{.+\}/g) 
+							? evalMidst(i) : i
+				);
+				return () => text[0](...x);
 			}
+			else return text
+
+		} catch (err) {
+			console.error(err);
+			console.warn("ctx:", ctx, "\ntext:", text);
+			return 'err'
 		}
-		else return text
 	};
 
 
@@ -34,18 +46,18 @@ export function ContentList({props}) {
 	return (
 		<section className={name+' ContentList'}>
 			<ul>
-				{items.map((item, idx) =>
-					<li key={idx} className={name+'-li'} onClick={()=>onClick('/chat/'+item._id)}>
+				{items.map((item, idx) => 
+					<li key={idx} className={name+'-li clickable'} onClick={resolveDot(item, onClick)}>
 						<ImageIcon 
-							src={resolveDot(item, 'item', icon.images) || icon.src || ''}
+							src={resolveDot(item, icon.images) || icon.src || ''}
 							role={icon.role || ''} 
 							size={icon.size || '24px'}
 							options={icon.options || "round"} 
 						/>
 
 						<div className="text-block">
-							<p>{resolveDot(item, 'item', titles) || item.name || item.title || ''}</p>
-							<span>{resolveDot(item, 'item', details) || item.details || item.description || ''}</span>
+							<p>{resolveDot(item, titles) || item.name || item.title || ''}</p>
+							<span>{resolveDot(item, details) || item.details || item.description || ''}</span>
 						</div>
 
 						<div className="right">

@@ -1,3 +1,4 @@
+import './index.css'
 import { useState } from 'react'
 import useChat from '../../contexts/chatContext'
 import useUser from '../../contexts/userContext'
@@ -6,7 +7,7 @@ import ImageIcon from '../../components/ImageIcon'
 import * as Menus from '../../components/Menus'
 import * as Lists from '../../components/Lists'
 import * as Textboxes from '../../components/Textboxes/Textboxes'
-import './index.css'
+import generateRandomUUID from '../../utils/generateRandomUUID'
 
 
 
@@ -19,7 +20,7 @@ export default function ChatsList({props}) {
 			chats,	setChats, 		status, 	setStatus, 
 			deleteChat,	renameChat,	 } = useChat();
 
-	const [view, setView] = useState(true);
+	const [view, setView] = useState(false);
 	const toggleView =()=> setView(!view);
 
 	const navigate = useNavigate();
@@ -32,16 +33,42 @@ export default function ChatsList({props}) {
 		setInput(prev => ({ ...prev, [et.name]: et.value, color: inputColor }));
 	};
 
-	const newChat = () => {
-		selectChat(null);
-		setMessages([]);
-		setView(false);
-	};
-
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		users?.filter(u => u.username === input);
 	}
+
+	const findChat = (query, option) => {
+		switch (option) {
+			case 'single-byUserID': {let found = Object.values(chats).find(chat => 
+				chat.users.length === 2 && chat.users.find(u => u === query));
+				return found ? found : undefined;
+			}; break;
+			case 'named': return chats.find(chat => chat.name === query); break;
+			case 'chatID':
+			default: return chats.find(chat => chat._id === query);
+		}
+	};
+
+	const createChat = (users) => {
+		const chatID = 'temp-'+generateRandomUUID();
+		const newchat = {
+			temp: chatID, 
+			name: users.map(u => u.username).join(' & '),
+			users: users.map(u => u._id), 
+			messages: []
+		};
+		setChats(prev => ({ ...prev, [chatID]: newchat }));
+		return newchat;
+	};
+
+	const handleChatSelection = (query, option) => {
+		let chat = findChat(query, option);
+		if (!chat) chat = createChat([user, friends.find(f => f._id === query)]);
+
+		selectChat(chat);
+		setMessages(chat.messages);
+	};
 
 
 	return (
@@ -57,11 +84,12 @@ export default function ChatsList({props}) {
 				<Menus.Ellipses props={{
 					name: 'chat-list-menu',
 					icon: 'c-ellipses',
-					'&new_message': newChat,
+					'&new_message': createChat,
 					'&view_friends%view_chats': [view, toggleView],
 					'&profile': ()=>navigate('/users/profile'),
 					'&disconnect%connect': [socket, toggleSocket],
 				}} />
+				{view ? <h2>Chats</h2> : <h2>Friends</h2>}
 			</header>
 
 			{view ? (
@@ -87,8 +115,8 @@ export default function ChatsList({props}) {
 					titles: '&displayname',
 					details: '&_id',
 					maxLines: 1,
-					icon: {images: '&photo.url'},
-					onClick: navigate,
+					icon: {images: '&photo?.url'},
+					onClick: [handleChatSelection, '&_id', 'single-byUserID'],
 					user,
 					menu: {
 						name: 'friends-list-item-menu',

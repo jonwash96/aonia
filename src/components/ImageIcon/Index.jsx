@@ -43,7 +43,7 @@ export default function ImageIcon(props) {
 	switch (props.role) {
 
 		case 'profile-photo': {
-			src = user?.photo?.url || config.defaultProfilePhoto(user);
+			src = src || user?.photo?.url || config.defaultProfilePhoto(user);
 			istyle = {...istyle, borderRadius:'50%', margin: '0 1%', aspectRatio: '1/1'};
 			dstyle = {...dstyle, display:'inline'};
 		}; break;

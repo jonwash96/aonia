@@ -6,10 +6,11 @@ import useUser from '../../contexts/userContext';
 
 
 export default function ChatWindow({props}) {
+	const { name, messages, usersNames, chatSelect } = props;
 	const { uid, user } = useUser();
-	const {	socket,	toggleSocket,	messages,	setMessages,
-			chats,	setChats, 		status, 	setStatus, 
-			deleteChat,	renameChat,	 } = useChat();
+	// const {	socket,	toggleSocket,	messages,	setMessages,
+	// 		chats,	setChats, 		status, 	setStatus, 
+	// 		deleteChat,	renameChat,	 } = useChat();
 	
 	const navigate = useNavigate();
 
@@ -19,19 +20,13 @@ export default function ChatWindow({props}) {
 			: message.uid===uid ? 'user' : 'friend';
 
 
-	if (!chats || chats.length === 0) return (
-		<section id="ChatWindow">
-			<h3>Start a Chat</h3>
-		</section>
-	)
-
-
 
 	return (
 		<section id="ChatWindow" className={name || ''}>
-			{messages?.length === 0 && <h3>Select a Message</h3>}
+			{!chatSelect && <h3>Select a Conversation</h3>}
+			{chatSelect && chatSelect.messages.length <1 && <h3>Send a message to {usersNames}</h3>}
 
-			{messages?.map((message,idx) => 
+			{chatSelect && chatSelect.messages?.map((message,idx) => 
 				<div key={idx} 
 					 className={"bubble "+bubbleColor(message)} 
 					 name={message.user}>

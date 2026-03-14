@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './index.css'
 import useChat from '../../contexts/chatContext'
 import useUser from '../../contexts/userContext'
@@ -13,17 +13,13 @@ export default function Chat() {
 
 	const { socket,	messages,	setMessages,
 			chats, 	setChats, 	status, 	setStatus } = useChat();
-
+			
 	const [chatSelect, selectChat] = useState();
 
-	const { id } = useParams();
-
-
-	const changeRooms = (convoID) => {
-		selectChat(convoID);
+	const changeRooms = (chat) => {
+		selectChat(chat);
 		socket.emit('join-room', uid, convoID);
 	};
-
 
 	return (
 		<main id="Chat">

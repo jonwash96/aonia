@@ -14,11 +14,17 @@ main#App {
 /* GLOBAL STYLES */
 .hide { display: none !important; }
 .show { display: block !important; }
+.clickable:hover { cursor:pointer; }
 
 a { color: var(--primary); }
 a:hover { cursor: pointer; }
 
 button:hover { cursor: pointer; }
+
+ul {
+    list-style: none;
+    padding: 0;
+}
 
 .img-icn {
     display: flex;

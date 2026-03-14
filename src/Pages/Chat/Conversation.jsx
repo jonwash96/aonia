@@ -11,23 +11,21 @@ import ChatWindow from './ChatWindow'
 
 
 export default function Conversation({props}) {
-	const { chatSelect, selectChat } = props;
-	const { uid, user, destroyCredentials } = useUser();
+	const { chatSelect, selectChat, chatID } = props;
 
-	const {	socket,	toggleSocket,	messages,	setMessages,
-			chats,	setChats, 		status, 	setStatus, 
-			deleteChat,	renameChat,	 } = useChat();
+	const { uid, user, destroyCredentials, findFriends } = useUser();
+
+	const {	socket,		toggleSocket,	messages,	setMessages,
+			chats,		setChats, 		status, 	setStatus, 
+			createChat,	findChat,		deleteChat,	renameChat,	 } = useChat();
 
 	const navigate = useNavigate();
 
-	const users = chatSelect?.users;
+	let users = chatSelect ? findFriends(chatSelect?.users) : undefined;
+	console.log("@Conversation. users:", chatSelect, users)
 	const friends = user.profile?.friends || undefined;
 
-
-	const newChat = () => {
-		selectChat(null);
-		setMessages([]);
-	};
+	const newChat =()=> null;
 
 	const handleKeys = (e) => {
 		if (input.text.startsWith('/') || input.text === '') {
@@ -46,7 +44,7 @@ export default function Conversation({props}) {
 	}};
 
 	const handleSubmit = (input) => {
-		const newMessage = { ...input, uid: uid, session: (user?.session || socket.id) };
+		const newMessage = { ...input, uid, session: (user?.session || socket.id) };
 		setMessages(prev => [ ...prev, newMessage ]);
 
 		//* DEV MODE //
@@ -94,7 +92,7 @@ export default function Conversation({props}) {
 				</h1>
 				<Menus.Ellipses props={{
 					name: 'chat-menu',
-					'&new_message': newChat,
+					'&new_chat': newChat,
 					'&friends': ()=>navigate('/users/friends'),
 					'&profile': ()=>navigate('/users/profile'),
 					'&disconnect%connect': [socket, toggleSocket],
@@ -105,7 +103,8 @@ export default function Conversation({props}) {
 
 			<ChatWindow props={{
 				name: 'chats',
-				messages, user, users,
+				messages, chatSelect,
+				usersNames: users?.map(u => u?.displayname || '')
 			}} />
 
 			<Textboxes.SmartMessage props={{

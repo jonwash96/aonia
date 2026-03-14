@@ -20,7 +20,9 @@ main#ChatList {
 	& > header {
 		width: 100%;
 		display: grid;
-		grid-template: 100% / 7fr 1fr;
+		grid-template: 1fr 1fr / 7fr 1fr;
+
+		& h2 { margin:.5em 0; }
 	}
 
 	& .ContentList ul {
@@ -48,6 +50,7 @@ main#ChatList {
 				justify-content: center;
 				margin-right: 10px;
 				align-items: end;
+
 				& span {
 					font-size: 9pt; 
 					font-weight: bold;

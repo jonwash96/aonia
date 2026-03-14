@@ -2,14 +2,14 @@
 import './App.css'
 import { Routes, Route, Navigate, redirect } from 'react-router'
 // import { useFetch, useFetchPOST } from './hooks/useFetch'
-// import Chat from './pages/Chat'
-// import { ChatProvider } from './contexts/chatContext'
+import Chat from './pages/Chat'
+import { ChatProvider } from './contexts/chatContext'
 import useUser from './contexts/userContext.jsx'
 // import AWS from './components/AWS'
 import './utils/bancroft-proto.js'
 import Weather from './pages/Weather'
 import Sidebar from './components/Nav/Sidebar.jsx'
-// import People from './pages/People'
+import People from './pages/People'
 import Login from './pages/Auth/Login.jsx'
 import Register from './pages/Auth/Register.jsx'
 import Logout from './pages/Auth/Logout.jsx'
@@ -55,14 +55,21 @@ function App() {
 				/>
 
 
-				{/* <Route
+				<Route
 					path="/chat"
 					element={
 						<ChatProvider uid={uid}>
 							<Chat />
 						</ChatProvider>}
 				/>
-				<Route path="chat/:id" element={<Chat />} /> */}
+
+				<Route
+					path="/chat/:chatID"
+					element={
+						<ChatProvider uid={uid}>
+							<Chat />
+						</ChatProvider>}
+				/>
 				
 
 				<Route
@@ -70,11 +77,11 @@ function App() {
 					element={<Weather />}
 				/>
 
-{/* 
+				
 				<Route 
 					path="users/profile" 
 					element={<People />} 
-				/>*/}
+				/>
 			</Routes> 
 
 		</main>

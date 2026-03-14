@@ -44,7 +44,7 @@ export default function Weather() {
 
 		<section id="user">
 			{user 
-				? <span>Welcome, {user.displayname}</span>
+				? <><span>Welcome, {user.displayname}</span><Link to="/logout">Log Out</Link></>
 				: <><Link to="/login">Login</Link><Link to="/register">Sign up</Link></>
 			}
 		</section>

@@ -22,18 +22,19 @@ export default function useChat() {
 
 export function ChatProvider({ uid, children }) {
 	const { user, setUser, authToken } = useUser();
-	const [chatEnabled, setChatEnabled] = useState();
+	const [chatEnabled, setChatEnabled] = useState(true);
 	const [socket, setSocket] = useState();
 	const [status, setStatus] = useState();
-	const [chats, setChats] = useState([]);
+	const [chats, setChats] = useState({});
 	const [rooms, setRooms] = useState([]);
-	const [messages, setMessages] = useState([
-		{ text: "Test Message from friend", uid: '123_456A', files: [] },
-		{ text: "Test Message from user", uid: uid, files: [] },
-	]);
+	const [messages, setMessages] = useState([]);
+	// const [messages, setMessages] = useState([
+	// 	{ text: "Test Message from friend", uid: '123_456A', files: [] },
+	// 	{ text: "Test Message from user", uid: uid, files: [] },
+	// ]);
 	const navigate = useNavigate();
 
-	const toggleSocket =()=> setSocket(!socket);
+	const toggleSocket =()=> setChatEnabled(!chatEnabled);
 
 	const deleteChat = (chatID) => {
 		socket.emit('delete-chat', uid, chatID);
@@ -55,19 +56,41 @@ export function ChatProvider({ uid, children }) {
 		})
 	}
 
+	const findChat = (query, option) => {
+			switch (option) {
+				case 'single-byUserID': {let found = Object.values(chats).find(chat => 
+					chat.users.length === 2 && chat.users.find(u => u === query));
+					return found ? found : undefined;
+				}; break;
+				case 'named': return chats.find(chat => chat.name === query); break;
+				case 'chatID':
+				default: return chats.find(chat => chat._id === query);
+			}
+		};
+	
+	const createChat = (users) => {
+		const chatID = 'temp-'+generateRandomUUID();
+		const newchat = {
+			temp: chatID, 
+			name: users.map(u => u.username).join(' & '),
+			users: users.map(u => u._id), 
+			messages: []
+		};
+		setChats(prev => ({ ...prev, [chatID]: newchat }));
+		return newchat;
+	};
+
 
 	useEffect(() => {
-		if (!chatEnabled) return;
-
 		async function chatService() {
 			console.log("@ChatProvider > Enable Chat. uid", uid);
 
-			if (!user.profile?.photo || user.profile?.friends) {
+			if (!user.profile.friends[0].photo.url) {
 				const fullyPopulatedUser = await userService.getUserData(uid, 'profile');
 				if (!fullyPopulatedUser) return navigate('/logout');
 				setUser(fullyPopulatedUser);
 				await delay(200);
-			}
+			};
 
 			const tokenized = localStorage.getItem('aonia-token');
 
@@ -85,12 +108,12 @@ export function ChatProvider({ uid, children }) {
 			
 			await delay(100);
 			
-			setSocket (io(serverStatus.url, { 
+			setSocket( io(serverStatus.url, { 
 				query: { uid, token: tokenized, 
 					chatInfo: {id: null, latest: chats?.messages?.at(-1).time || null} },
 			}));
 
-		}; chatService();
+		}; chatEnabled && chatService();
 	},[chatEnabled]);
 
 	
@@ -110,23 +133,29 @@ export function ChatProvider({ uid, children }) {
 			setChats(data.chats);
 		});
 
-		socket.on('receive-chatdata', (data) => {
-			console.log("@ChatProvider. chatData received", data);
-			setChats(data.chats);
+		socket.on('receive-chatdata', (chats) => {
+			/* Receives all chat objs from server on connection */
+			console.log("@ChatProvider. chatData received", chats);
+			setChats (() => {
+				const obj = {};
+				chats.forEach(chat => obj[chat._id] = chat);
+			});
 		});
 
 		socket.on('receive-chatupdate', (data, chatID) => {
 			console.log("@ChatProvider. chat update received", chatID, data);
 			setChats(prev => {
-				const idx = prev.findIndex(chat => chat.id === chatID);
-				const newChat = [ ...prev[idx], ...data ];
+				const idx = prev.findIndex(chat => chat._id === chatID);
+				const newChat = { ...prev[idx], ...data };
 				return prev.splice(idx, 1, newChat);
 			})
 		});
 
-		socket.on('receive-message', (message) => {
+		socket.on('receive-message', (message, chatID) => {
 			console.log("Message Received:", message);
-			setMessages(prev => [...prev, message])
+			setChats(prev => ({ ...prev, [chatID]: { 
+				...prev[chatID], messages: [ ...prev[chatID].messages, message ]
+			} }));
 		});
 
 		socket.on('error', (message, code) => {
@@ -144,12 +173,12 @@ export function ChatProvider({ uid, children }) {
 			chats, 		setChats,
 			rooms, 		setRooms,
 			status, 	setStatus,
+			createChat,	findChat,
 			deleteChat, renameChat
 		}}>
 			{socket
 				? children
-				: (<><button onClick={()=>setChatEnabled(true)}>Enable</button>
-				   </>)
+				: <button onClick={()=>setChatEnabled(true)}>Enable</button>
 			}
 		</ChatContext.Provider>
 	)

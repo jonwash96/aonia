@@ -2,11 +2,21 @@ import { useState } from 'react'
 import ImageIcon from '../ImageIcon';
 import RecursiveMap from '../RecursiveMap';
 import './Textboxes.css'
+import useChat from '../../contexts/chatContext'
+import useUser from '../../contexts/userContext'
 
 
 
 export function Search({props}) {
 	const { name, onSubmit, data, icon, button } = props;
+
+	const { uid, user } = useUser();
+	
+	const {	socket,	toggleSocket,	messages,	setMessages,
+			chats,	setChats, 		status, 	setStatus, 
+			deleteChat,	renameChat,	 } = useChat();
+
+
 	const defaultState = { text: '', color: 'inherit' };
 	const [input, setInput] = useState(defaultState);
 	const [cmdHistory, setCmdHistory] = useState([]);
@@ -38,13 +48,27 @@ export function Search({props}) {
 		setInput(prev => ({ ...prev, [et.name]: et.value, color: inputColor }));
 	};
 
+	const handleCMD = (text) => {
+		if (text.startsWith('eval')) eval(text.slice(5));
+		if (text.startsWith('log')) console.log(eval(text.slice(4)));
+	};
+
 	const clear =()=> setInput(defaultState);
 
 	const validateSubmit = (e) => {
-		e.preventDefault();
+		// e.preventdefault();
 		if (input.text === '') return console.log("No input");
+		
+		if (input.text.startsWith('/')) {
+			setCmdHistory(prev => [ ...prev, { 
+				...input, 
+				prevNode: cmdHistory.length === 0 ? 0 : cmdHistory.length -1, 
+				nextNode: cmdHistory.length +1 } ])
+		};
+
 		const validated = input;
-		onSubmit(validated);
+		if (input.color === '#0bf') return handleCMD(input.text.slice(1));
+		else onSubmit(validated);
 		return clear();
 	};
 
@@ -57,9 +81,10 @@ export function Search({props}) {
 					onChange={handleChange} 
 					onFocus={()=>setSuggestionViz('open')}
 					onBlur={()=>setSuggestionViz('')}
-					value={input.search}
-					name="search"
+					value={input.text}
+					name="text"
 					type="search" 
+					style={{color: input.color || 'inherit'}}
 					placeholder="Search" 
 					autoComplete="off"
 				/>
@@ -77,7 +102,7 @@ export function Search({props}) {
 				<div className={name+'-search-suggestions search-suggestions '+suggestionVis}>
 					{data.length === 0 
 						? <em>Type to Search for users & chats. . .</em>
-						: <RecursiveMap parent={data} /> }
+						: <RecursiveMap parent={{ ...data, command_history: [...cmdHistory, 'dummy1', {dummy2: ['a', 'b']}] }} /> }
 				</div>
 			)}
 		</section>
@@ -119,7 +144,7 @@ export function SmartMessage({props}) {
 	const clear =()=> setInput(defaultState);
 
 	const validateSubmit = (e) => {
-		e.preventDefault();
+		// e.preventdefault();
 		if (input.text === '') return console.log("No input");
 
 		if (input.text.startsWith('/')) {

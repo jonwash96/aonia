@@ -26,7 +26,7 @@ export async function indexUserProfiles(query) {
 
 export async function getUserData(uid, query) {
     try {
-        const q = query ? '/?q='+query : '';
+        const q = query ? '/?populate='+query : '';
 
         const res = await fetch(BASE_URL+'/'+uid+q, {
             method: 'GET',

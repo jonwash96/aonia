@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router'
 import useChat from '../../contexts/chatContext'
+import useUser from '../../contexts/userContext'
 import ImageIcon from '../ImageIcon'
 import * as Menus from '../Menus'
 import * as SVG from '../../assets/svg'
@@ -9,7 +10,7 @@ import './Sidebar.css'
 
 export default function Sidebar() {
 	const navigate = useNavigate();
-
+	const { user } = useUser();
 
 
   return (
@@ -57,7 +58,7 @@ export default function Sidebar() {
 				name: 'chat',
 				icon: {
 					role: 'messaging',
-					onClick: ()=>navigate('/')
+					onClick: ()=>navigate('/chat')
 				},
 				menu: {
 					'&chat': ()=>navigate('/chat'),
@@ -95,6 +96,7 @@ export default function Sidebar() {
 					'&Astramuse': ()=>navigate('/astramuse')
 				} 
 			}}/>
+			{user && <small title={user.username}>{user.username}</small>}
 		</section>
 	</nav>
   )

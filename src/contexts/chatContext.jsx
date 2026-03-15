@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useMemo } from 'react'
 import { io } from 'socket.io-client'
 import useUser from './userContext'
 import * as userService from '../services/userService.js'
@@ -6,13 +6,16 @@ import { useNavigate } from 'react-router'
 const BACK_END_URL = import.meta.env.VITE_BACK_END_URL;
 const BACK_END_PORT = import.meta.env.VITE_BACK_END_PORT;
 const CHAT_PORT = import.meta.env.VITE_CHATPORT;
+import generateRandomUUID from '../utils/generateRandomUUID'
 
 const delay = async (time) => await new Promise(geaux => 
 	setTimeout(()=>geaux(), time));
 
 
 
-const ChatContext = React.createContext();
+const ChatContext = React.createContext({
+	socket: null, status: null
+});
 
 export default function useChat() {
 	return useContext(ChatContext)
@@ -22,12 +25,11 @@ export default function useChat() {
 
 export function ChatProvider({ uid, children }) {
 	const { user, setUser, authToken } = useUser();
-	const [chatEnabled, setChatEnabled] = useState(true);
+	const [chatEnabled, setChatEnabled] = useState(false);
 	const [socket, setSocket] = useState();
 	const [status, setStatus] = useState();
 	const [chats, setChats] = useState({});
-	const [rooms, setRooms] = useState([]);
-	const [messages, setMessages] = useState([]);
+	const [chatSelect, setChatSelect] = useState();
 	// const [messages, setMessages] = useState([
 	// 	{ text: "Test Message from friend", uid: '123_456A', files: [] },
 	// 	{ text: "Test Message from user", uid: uid, files: [] },
@@ -36,13 +38,18 @@ export function ChatProvider({ uid, children }) {
 
 	const toggleSocket =()=> setChatEnabled(!chatEnabled);
 
+	const selectChat = (chat) => {
+		setChatSelect(chat);
+		socket.emit('join-room', uid, chat._id);
+	};
+
 	const deleteChat = (chatID) => {
 		socket.emit('delete-chat', uid, chatID);
 		socket.on('chat-deleted', (message, chat_id) => {
 			setChats(prev => prev.splice(chats.findIndex(chat_id), 1));
 			setStatus({message, color: 'red'});
 		})
-	}
+	};
 
 	const renameChat = (chatID, name) => {
 		socket.emit('rename-chat', uid, chatID, name);
@@ -54,7 +61,13 @@ export function ChatProvider({ uid, children }) {
 			));
 			setStatus({message, color: 'inherit'});
 		})
-	}
+	};
+
+	const appendMessage = (message, chatID) => {
+		setChats({ ...chats, [chatID]: { 
+			...chats[chatID], messages: [ ...chats[chatID].messages, message ]
+		} });
+	};
 
 	const findChat = (query, option) => {
 			switch (option) {
@@ -63,8 +76,8 @@ export function ChatProvider({ uid, children }) {
 					return found ? found : undefined;
 				}; break;
 				case 'named': return chats.find(chat => chat.name === query); break;
-				case 'chatID':
-				default: return chats.find(chat => chat._id === query);
+				case 'bychatID': console.log("@findChat", option, query)
+				default: return chats[query];
 			}
 		};
 	
@@ -76,16 +89,16 @@ export function ChatProvider({ uid, children }) {
 			users: users.map(u => u._id), 
 			messages: []
 		};
-		setChats(prev => ({ ...prev, [chatID]: newchat }));
 		return newchat;
 	};
 
 
 	useEffect(() => {
+		let ignore = false;
 		async function chatService() {
 			console.log("@ChatProvider > Enable Chat. uid", uid);
 
-			if (!user.profile.friends[0].photo.url) {
+			if (!user.profile.friends[0]?.photo.url) {
 				const fullyPopulatedUser = await userService.getUserData(uid, 'profile');
 				if (!fullyPopulatedUser) return navigate('/logout');
 				setUser(fullyPopulatedUser);
@@ -110,10 +123,11 @@ export function ChatProvider({ uid, children }) {
 			
 			setSocket( io(serverStatus.url, { 
 				query: { uid, token: tokenized, 
-					chatInfo: {id: null, latest: chats?.messages?.at(-1).time || null} },
+					chatInfo: {chatID: chatSelect?._id || null, latest: chats?.messages?.at(-1).time || null} },
 			}));
 
-		}; chatEnabled && chatService();
+		}; chatEnabled && !socket && chatService();
+		return () => {ignore = true; socket?.disconnect(); setSocket(undefined); setChatEnabled(false)}
 	},[chatEnabled]);
 
 	
@@ -124,8 +138,12 @@ export function ChatProvider({ uid, children }) {
 			setSocket(socket);
 		});
 
-		socket.on("connect_error", (err) => {
-			console.log(`connect_error due to ${err.message}`);
+		socket.on("connect_error", async (err) => {
+			console.error(`connect_error due to ${err.message}`);
+			socket.disconnect();
+			toggleSocket();
+			await delay(200);
+			toggleSocket();
 		});
 
 		socket.on('receive-userdata', (data) => {
@@ -133,13 +151,12 @@ export function ChatProvider({ uid, children }) {
 			setChats(data.chats);
 		});
 
-		socket.on('receive-chatdata', (chats) => {
+		socket.on('chatdata', (chats) => {
 			/* Receives all chat objs from server on connection */
 			console.log("@ChatProvider. chatData received", chats);
-			setChats (() => {
-				const obj = {};
-				chats.forEach(chat => obj[chat._id] = chat);
-			});
+			const obj = {};
+			chats.length > 0 && chats.forEach(chat => obj[chat._id] = chat);
+			setChats(obj);
 		});
 
 		socket.on('receive-chatupdate', (data, chatID) => {
@@ -153,13 +170,19 @@ export function ChatProvider({ uid, children }) {
 
 		socket.on('receive-message', (message, chatID) => {
 			console.log("Message Received:", message);
-			setChats(prev => ({ ...prev, [chatID]: { 
-				...prev[chatID], messages: [ ...prev[chatID].messages, message ]
-			} }));
+			appendMessage(message, chatID);
+		});
+
+		socket.on('chat-created', async (chat) => {
+			console.log("...New Chat Created:", chat);
+			setChats(prev => ({ ...prev, [chat._id]: chat }));
+			await delay(100)
+			selectChat(chats[chat._id]);
 		});
 
 		socket.on('error', (message, code) => {
-			console.log("Socket.io error", code, message);
+			console.warn("Socket.io error", code, message);
+			socket.disconnect();
 			setStatus({message, color: 'red'});
 		})
 	}
@@ -169,9 +192,9 @@ export function ChatProvider({ uid, children }) {
 	return (
 		<ChatContext.Provider value={{
 			socket, 	toggleSocket,
-			messages, 	setMessages,
+			appendMessage,
 			chats, 		setChats,
-			rooms, 		setRooms,
+			chatSelect, selectChat,
 			status, 	setStatus,
 			createChat,	findChat,
 			deleteChat, renameChat

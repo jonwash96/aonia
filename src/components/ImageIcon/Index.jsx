@@ -58,7 +58,7 @@ export default function ImageIcon(props) {
 		case 'almanac': 	svg =()=> SVG.libraryIcon		(size || '25px', defaultColor(), defaultColor()) || noImg; break;
 		case 'hamburger': 	svg =()=> SVG.hamburgerMenuIcon	(size || '25px', defaultColor(), defaultColor()) || noImg; break;
 		case 'messaging': 	svg =()=> SVG.messagesIcon		(size || '25px', defaultColor(), defaultColor()) || noImg; break;
-		case 'c-ellipses': 	svg =()=> SVG.circleHBIcon			(size || '25px', defaultColor(), defaultColor()); break;	
+		case 'c-ellipses': 	svg =()=> SVG.circleHBIcon		(size || '25px', defaultColor(), defaultColor()); break;	
 		case 'ellipses': 	svg =()=> SVG.ellipses			(size || '25px', defaultColor(), defaultColor()); break;	
 		case 'ph': 			svg =()=> noImg(); break;
 		

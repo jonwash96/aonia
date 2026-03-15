@@ -10,11 +10,22 @@ main#App {
     grid-gap: 1em;
 }
 
+@media screen and (max-width: 480px) {
+    main#App {
+        display: grid;
+        grid-template: 72px auto / 100%;
+        align-items: start;
+        grid-gap: 1em;
+    }
+}
+
 
 /* GLOBAL STYLES */
 .hide { display: none !important; }
 .show { display: block !important; }
 .clickable:hover { cursor:pointer; }
+
+.c-flex { display:flex; justify-content:center; align-items:center; }
 
 a { color: var(--primary); }
 a:hover { cursor: pointer; }
@@ -26,6 +37,8 @@ ul {
     padding: 0;
 }
 
+
+/* GLOBAL COMPONENTS */
 .img-icn {
     display: flex;
     justify-self: center;

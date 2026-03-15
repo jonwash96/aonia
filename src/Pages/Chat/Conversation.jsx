@@ -7,58 +7,47 @@ import * as Menus from '../../components/Menus'
 import * as Lists from '../../components/Lists'
 import * as Textboxes from '../../components/Textboxes/Textboxes'
 import ChatWindow from './ChatWindow'
+import ChatsList from './ChatsList'
 
 
 
 export default function Conversation({props}) {
-	const { chatSelect, selectChat, chatID } = props;
-
 	const { uid, user, destroyCredentials, findFriends } = useUser();
 
-	const {	socket,		toggleSocket,	messages,	setMessages,
-			chats,		setChats, 		status, 	setStatus, 
-			createChat,	findChat,		deleteChat,	renameChat,	 } = useChat();
+	const {	socket,		toggleSocket,	appendMessage,
+			chats,		setChats, 		chatSelect, 	selectChat, 
+			createChat,	findChat,		deleteChat,		renameChat,	 } = useChat();
 
 	const navigate = useNavigate();
 
-	let users = chatSelect ? findFriends(chatSelect?.users) : undefined;
-	console.log("@Conversation. users:", chatSelect, users)
+	const users = chatSelect ? findFriends(chatSelect?.users) : undefined;
 	const friends = user.profile?.friends || undefined;
 
 	const newChat =()=> null;
 
-	const handleKeys = (e) => {
-		if (input.text.startsWith('/') || input.text === '') {
-			if (e.key === 'ArrowUp') {
-				e.preventDefault();
-				if ('prevNode' in input) setInput(cmdHistory.at(input.prevNode))
-					else if (cmdHistory.length > 0) setInput(cmdHistory.at(-1));
-			}
-			if (e.key === 'ArrowDown') {
-				e.preventDefault();
-				if ('nextNode' in input && cmdHistory.length > input.nextNode) 
-					setInput(cmdHistory.at(input.nextNode))
-				else if ('nextNode' in input && cmdHistory.length === input.nextNode)
-					setInput(defaultState)
-			}
-	}};
 
 	const handleSubmit = (input) => {
-		const newMessage = { ...input, uid, session: (user?.session || socket.id) };
-		setMessages(prev => [ ...prev, newMessage ]);
+		//TODO:: Change this to pid not uid for clarity
+		const newMessage = { ...input, uid: user.profile._id, session: (user?.session || socket.id), time: Date.now() };
+
+		console.log("@handleSubmit. Send New Message:", chatSelect._id, newMessage);
+
+		if (!input.text.startsWith('/') && chatSelect.temp) {
+			const newChat = { ...chatSelect, messages: [ ...chatSelect.messages, newMessage ] };
+			selectChat({ ...newChat, messages: [ ...chatSelect.messages, {text: "Creating new Chat. . ."} ]});
+			console.log("@handleSubmit message. Creating new Chat...", newChat);
+			return socket.emit('create-chat', uid, newChat);
+		};
 
 		//* DEV MODE //
 		if (input.text==='/clear') {
 			destroyCredentials(); 
-			navigate('/');
+			navigate('/login');
 			window.location.reload();
 			return
 		};
 
-		if (input.text.match(/^\/setUID\s?\=\s?\S+/gi)) 
-			storeUID(input.text.match(/^\/setUID\s?\=\s?["']?(.+)["']?/)[1], uid)
-
-		else if (input.text.match(/^\/join user\s*\S+/gi)) 
+		if (input.text.match(/^\/join user\s*\S+/gi)) 
 			socket.emit('join-user', uid, input.text.match(/(?<=join\s?user\s)\S+/gi)[0])
 
 		else if (input.text.match(/^\/join\s*\S+/gi)) 
@@ -74,24 +63,32 @@ export default function Conversation({props}) {
 			socket.emit('broadcast', uid, input.text.match(/(?<=broadcast\s).+/gi)[0])
 
 
-		else socket.emit('send-message', uid, newMessage, chatSelect);
-		
+		else {
+			appendMessage(newMessage, chatSelect._id);
+			socket.emit('send-message', uid, newMessage, chatSelect._id);
+		};
 	};
 
 
 	return (
 		<main id="Conversation">
 			<header>
-				<ImageIcon 
-					src={user.profile.photo.url}
-					role="profile-photo" 
-					size="24px"
-				/>
-				<h1>
-					{chatSelect?.name || "Select a Chat"}
-				</h1>
+				<div>
+					<ImageIcon 
+						src={user.profile.photo.url}
+						role="profile-photo" 
+						size="24px"
+					/>
+				</div>
+				<div>
+					<h1>
+						{chatSelect?.name || "Select a Chat"}
+					</h1>
+					<span>{chatSelect?._id || ''}</span>
+				</div>
 				<Menus.Ellipses props={{
 					name: 'chat-menu',
+					icon: 'c-ellipses',
 					'&new_chat': newChat,
 					'&friends': ()=>navigate('/users/friends'),
 					'&profile': ()=>navigate('/users/profile'),
@@ -103,7 +100,7 @@ export default function Conversation({props}) {
 
 			<ChatWindow props={{
 				name: 'chats',
-				messages, chatSelect,
+				chatSelect, chats,
 				usersNames: users?.map(u => u?.displayname || '')
 			}} />
 

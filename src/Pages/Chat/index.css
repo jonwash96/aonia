@@ -5,7 +5,7 @@ main#Chat {
 	grid-template: 100% / 1fr 1.66fr;
 	gap: 1em;
 
-	& main {
+	& > main {
 		border-radius: 12px;
 		border: 1px solid #0578;
 		background-color: #0248;
@@ -67,12 +67,31 @@ main#Conversation {
 	display:flex;
 	flex-direction: column;
 	justify-content: end;
+
+	& > header {
+		display: grid;
+		grid-template: 50px / 50px auto 50px;
+		
+		& > div {
+			display: flex; 
+			justify-content: center;
+			align-items: center;
+
+			&:nth-last-of-type(2) {
+				align-items: start;
+				flex-direction: column;
+				& span { opacity: .5; }
+			}
+		}
+
+		& h1 { margin: 0; }
+	}
 }
 
 section#ChatWindow {
 	width:100%; 
 	height:100%;
-	border:1px solid grey;
+	/* border:1px solid grey; */
 	display:flex;
 	flex-direction: column;
 	justify-content: end;
@@ -80,18 +99,25 @@ section#ChatWindow {
 	overflow: scroll;
 
 	& div.bubble {
-		width: 60%;
+		width: max-content;
 		padding: .5em;
 		margin: .25em;
+
+		& small {
+			margin-top: 6px; 
+			display: block;
+			opacity: .75; 
+			text-align: left;
+		}
 		
 		&.user {
 			text-align: right;
 			align-self: end;
-			background-color: darkgoldenrod;
+			background: linear-gradient(to bottom right, darkgoldenrod, var(--dgold) 85%);
 			border-radius: 12px 12px 0 12px;
 		}
 		&.friend {
-			background-color: cadetblue;
+			background: linear-gradient(to top right, cadetblue, var(--lsteelblue) 35%);
 			border-radius: 12px 12px 12px 0;
 		}
 		&.cmd {
@@ -108,13 +134,21 @@ section.SmartMessage {
 	position: sticky;
 	bottom:0;
 	width:100%;
+}
+
+
+
+@media screen and (max-width: 480px) {
+	main#Chat {
+		width: 100%;
+		overflow-x: scroll;
+		scroll-snap-type: x mandatory;
 	
-	&  div.input {
-		width:100%;
-		display: grid;	
-		grid-template: 100% / auto 40px 40px;
-		gap: 2px;
-		
-		& input, button {height: 40px;}
+		& main {
+			width: 90vw;
+
+			&:first-child { scroll-snap-align: start; }
+			&:last-child { scroll-snap-align: end; }
+		}
 	}
 }

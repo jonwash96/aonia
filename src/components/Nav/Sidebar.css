@@ -15,7 +15,7 @@ nav#Sidebar {
 	border-right: .5px solid var(--dblue);
 	z-index: 10;
 
-	& section.pages, & section.more {
+	& > section {
 		display: flex;
 		flex-direction: column;
 		justify-content: start;
@@ -33,4 +33,30 @@ nav#Sidebar {
 		& ul {display: none;}
 	}
 
+}
+
+@media screen and (max-width: 480px) {
+	nav#Sidebar {
+		height: 100%;
+		flex-direction: row;
+		justify-content: space-between;
+		gap: 1em;
+		align-items: center;
+		padding: .25em 0;
+		background: linear-gradient(to right, var(--sdblue), var(--steelblue));
+		overflow-x: scroll;
+		scrollbar-width: none;
+		padding: 0 1em;
+
+		& > section {
+			flex-direction: row;
+			align-items: center;
+			gap: 1em;
+		}
+
+		& div.img-icn {
+			height: 2em;
+			aspect-ratio: 1/1;
+		}
+	}
 }

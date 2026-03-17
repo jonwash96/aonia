@@ -21,7 +21,7 @@ export default function Login() {
       navigate('/');
       console.log("@signin: user", user)
     } catch (err) {
-      setError(err.error || 'Sign in failed');
+      setError(err.error || err || 'Sign in failed');
     }
   }
 

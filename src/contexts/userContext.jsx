@@ -33,6 +33,11 @@ export function UserProvider({ children }){
     const [authToken, setAuthToken] = useState(getUserFromToken());
 	const [updateNotifications, setudn] = useState();
 
+	const storeUser = (user) => {
+		setUser(user);
+		sessionStorage.setItem('userData', JSON.stringify(user));
+	};
+
 	const destroyCredentials = (userCTX=true) => {
 		if (localStorage.getItem('aonia-token')) {
 			localStorage.removeItem('aonia-token');
@@ -77,7 +82,7 @@ export function UserProvider({ children }){
     
     return <UserContext.Provider value={{ 
 		uid: user?._id || null, 
-		user, setUser, 
+		user, setUser, storeUser,
 		authToken, setAuthToken,
 		destroyCredentials,
 		findFriends,

@@ -5,9 +5,8 @@ import { Link, useNavigate } from 'react-router'
 import ImageIcon from '../../components/ImageIcon'
 import * as Menus from '../../components/Menus'
 import * as Lists from '../../components/Lists'
-import * as Textboxes from '../../components/Textboxes/Textboxes'
+import SmartTextbox from '../../components/Textboxes'
 import ChatWindow from './ChatWindow'
-import ChatsList from './ChatsList'
 
 
 
@@ -104,7 +103,7 @@ export default function Conversation({props}) {
 				usersNames: users?.map(u => u?.displayname || '')
 			}} />
 
-			<Textboxes.SmartMessage props={{
+			<SmartTextbox type="Message" props={{
 				name: 'chat-input',
 				onSubmit: handleSubmit,
 				data: { chats, friends },

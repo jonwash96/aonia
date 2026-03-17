@@ -76,6 +76,12 @@ function App() {
 					path="/weather"
 					element={<Weather />}
 				/>
+				
+
+				{/* <Route
+					path="/test"
+					element={<Test />}
+				/> */}
 
 				
 				<Route 

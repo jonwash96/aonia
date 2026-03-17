@@ -4,7 +4,7 @@ const SECRET = import.meta.VITE_SECRET;
 import { Link } from 'react-router'
 import WeatherTable from './WeatherTable'
 import { meteodata } from './meteodata.js'
-import * as Textboxes from '../../components/Textboxes/Textboxes'
+import SmartTextbox from '../../components/Textboxes'
 import { weatherData, currentWeather } from './weatherdata.js'
 import * as WeatherCards from './WeatherCards'
 import * as SVG from '../../assets/svg.jsx'
@@ -33,7 +33,7 @@ export default function Weather() {
 
   return (
 	<main id="Weather">
-		<Textboxes.Search props={{
+		<SmartTextbox type="Search" props={{
 			name: 'weather-search',
 			id: 'weather-search',
 			onSubmit: onSubmit,

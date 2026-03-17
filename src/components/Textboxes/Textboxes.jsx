@@ -11,11 +11,11 @@ import * as userService from '../../services/userService'
 export function Search({props}) {
 	const { name, onSubmit, data, icon, button } = props;
 
-const { uid, user, getNotifications } = useUser();
+	const { uid, user, getNotifications } = useUser();
 
-const {	socket,		toggleSocket,	appendMessage,
-		chats,		setChats, 		chatSelect, 	selectChat, 
-		createChat,	findChat,		deleteChat,		renameChat,	 } = useChat();
+	const {	socket,		toggleSocket,	appendMessage,
+			chats,		setChats, 		chatSelect, 	selectChat, 
+			createChat,	findChat,		deleteChat,		renameChat,	 } = useChat();
 
 
 	const defaultState = { text: '', color: 'inherit' };
@@ -107,12 +107,13 @@ const {	socket,		toggleSocket,	appendMessage,
 			setCmdHistory(prev => [ ...prev, { 
 				...input, 
 				prevNode: cmdHistory.length === 0 ? 0 : cmdHistory.length -1, 
-				nextNode: cmdHistory.length +1 } ])
+				nextNode: cmdHistory.length +1 } ]);
+
+			return handleCMD(input.text.slice(1));
 		};
 
 		const validated = input;
-		if (input.color === '#0bf') return handleCMD(input.text.slice(1));
-		else onSubmit(validated);
+		onSubmit(validated);
 		return clear();
 	};
 
@@ -158,7 +159,7 @@ const {	socket,		toggleSocket,	appendMessage,
 
 
 export function SmartMessage({props}) {
-	const { name, onChange, onSubmit, onClear, data} = props;
+	const { name, onChange, onSubmit, onClear, data } = props;
 	const defaultState = { text: '', files: [], color: 'inherit' };
 	const [input, setInput] = useState(defaultState);
 	const [cmdHistory, setCmdHistory] = useState([]);

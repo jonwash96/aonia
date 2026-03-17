@@ -3,10 +3,11 @@ import { io } from 'socket.io-client'
 import useUser from './userContext'
 import * as userService from '../services/userService.js'
 import { useNavigate } from 'react-router'
-const BACK_END_URL = import.meta.env.VITE_BACK_END_URL;
+import generateRandomUUID from '../utils/generateRandomUUID'
+import { connection, connect, disconnect } from '../services/chatService.js'
+const BACK_END_SERVER_URL = import.meta.env.VITE_BACK_END_SERVER_URL;
 const BACK_END_PORT = import.meta.env.VITE_BACK_END_PORT;
 const CHAT_PORT = import.meta.env.VITE_CHATPORT;
-import generateRandomUUID from '../utils/generateRandomUUID'
 
 const delay = async (time) => await new Promise(geaux => 
 	setTimeout(()=>geaux(), time));
@@ -14,7 +15,7 @@ const delay = async (time) => await new Promise(geaux =>
 
 
 const ChatContext = React.createContext({
-	socket: null, status: null
+	socket: connection
 });
 
 export default function useChat() {
@@ -24,7 +25,7 @@ export default function useChat() {
 
 
 export function ChatProvider({ uid, children }) {
-	const { user, setUser, authToken } = useUser();
+	const { user, setUser, authToken, storeUser } = useUser();
 	const [chatEnabled, setChatEnabled] = useState(false);
 	const [socket, setSocket] = useState();
 	const [status, setStatus] = useState();
@@ -36,7 +37,13 @@ export function ChatProvider({ uid, children }) {
 	// ]);
 	const navigate = useNavigate();
 
-	const toggleSocket =()=> setChatEnabled(!chatEnabled);
+	const toggleSocket = () => {
+		setChatEnabled(!chatEnabled);
+		socket?.connected === true
+			&& disconnect();
+		socket?.connected === false
+			&& setSocket(connect())
+	};
 
 	const selectChat = (chat) => {
 		setChatSelect(chat);
@@ -93,57 +100,30 @@ export function ChatProvider({ uid, children }) {
 	};
 
 
-	useEffect(() => {
-		let ignore = false;
-		async function chatService() {
-			console.log("@ChatProvider > Enable Chat. uid", uid);
 
-			if (!user.profile.friends[0]?.photo.url) {
-				const fullyPopulatedUser = await userService.getUserData(uid, 'profile');
-				if (!fullyPopulatedUser) return navigate('/logout');
-				setUser(fullyPopulatedUser);
-				await delay(200);
-			};
-
-			const tokenized = localStorage.getItem('aonia-token');
-
-			let serverStatus = await fetch(BACK_END_URL+':'+BACK_END_PORT+'/chat/', {
-				"method": "PATCH",
-				"headers": {
-					"Content-Type": "application/json",
-					"Access-Control-Allow-Origin": "*",
-					"Authorization": `Bearer ${tokenized}`
-				}
-			});
-
-			serverStatus = await serverStatus.json();
-			if (serverStatus.error) throw new Error ("Error Connecting to the Chat server.", serverStatus.error);
-			
-			await delay(100);
-			
-			setSocket( io(serverStatus.url, { 
-				query: { uid, token: tokenized, 
-					chatInfo: {chatID: chatSelect?._id || null, latest: chats?.messages?.at(-1).time || null} },
-			}));
-
-		}; chatEnabled && !socket && chatService();
-		return () => {ignore = true; socket?.disconnect(); setSocket(undefined); setChatEnabled(false)}
+	useEffect(()=> {
+		if (chatEnabled) {
+			new Promise((fulfil, abort) => {
+				new Promise((resolve, reject) => {
+					connect({resolve, reject}, {fulfil, abort}, user, chatSelect?._id)
+				})
+				.then(userData => storeUser(userData))
+				.catch(err => err && console.error(err)) ;
+			})
+			.then(_socket => setSocket(_socket))
+			.catch(abort => setChatEnabled(false));
+		}
 	},[chatEnabled]);
 
-	
 
-	if (socket) {
-		socket.on('connect', () => {
-			console.log("@ChatProvider. socket.io connected to", socket.id);
-			setSocket(socket);
-		});
-
+	if (socket?.connected === true) {
 		socket.on("connect_error", async (err) => {
 			console.error(`connect_error due to ${err.message}`);
-			socket.disconnect();
-			toggleSocket();
-			await delay(200);
-			toggleSocket();
+			// socket.disconnect();
+			// toggleSocket();
+			// await delay(200);
+			// toggleSocket();
+			connection.disconnect();
 		});
 
 		socket.on('receive-userdata', (data) => {
@@ -182,7 +162,7 @@ export function ChatProvider({ uid, children }) {
 
 		socket.on('error', (message, code) => {
 			console.warn("Socket.io error", code, message);
-			socket.disconnect();
+			// socket.disconnect();
 			setStatus({message, color: 'red'});
 		})
 	}

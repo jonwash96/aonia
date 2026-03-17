@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router'
 import ImageIcon from '../../components/ImageIcon'
 import * as Menus from '../../components/Menus'
 import * as Lists from '../../components/Lists'
-import * as Textboxes from '../../components/Textboxes/Textboxes'
+import SmartTextbox from '../../components/Textboxes'
 
 
 
@@ -14,7 +14,7 @@ import * as Textboxes from '../../components/Textboxes/Textboxes'
 export default function ChatsList({props}) {
 	const { uid, user, findFriends } = useUser();
 
-	const {	socket,		toggleSocket,	appendMessage,	
+	const {	socket, toggleSocket,	appendMessage,	
 			chats,		setChats,		chatSelect, 	selectChat, 
 			createChat, findChat,		deleteChat,		renameChat,	 } = useChat();
 
@@ -44,7 +44,7 @@ export default function ChatsList({props}) {
 	return (
 		<main id="ChatList">
 			<header>
-				<Textboxes.Search props={{
+				<SmartTextbox type="Search" props={{
 					name: 'searchChats',
 					onSubmit: handleSubmit,
 					data: { chats, friends },
@@ -57,7 +57,7 @@ export default function ChatsList({props}) {
 					'&new_message': createChat,
 					'&view_friends%view_chats': [view, toggleView],
 					'&profile': ()=>navigate('/users/profile'),
-					'&disconnect%connect': [socket, toggleSocket],
+					'&disconnect%connect': [socket?.connected, toggleSocket],
 				}} />
 				{view ? <h2>Chats</h2> : <h2>Friends</h2>}
 			</header>

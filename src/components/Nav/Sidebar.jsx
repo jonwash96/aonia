@@ -88,7 +88,7 @@ export default function Sidebar() {
 				name: 'people',
 				icon: {
 					role: 'profile-photo',
-					onClick: ()=>navigate('/people')
+					onClick: ()=>navigate('/logout')
 				},
 				menu: {
 					'&profile': ()=>navigate('/profile'),

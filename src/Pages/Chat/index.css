@@ -71,6 +71,8 @@ main#Conversation {
 	& > header {
 		display: grid;
 		grid-template: 50px / 50px auto 50px;
+		position: sticky;
+		top: 0;
 		
 		& > div {
 			display: flex; 
@@ -89,43 +91,54 @@ main#Conversation {
 }
 
 section#ChatWindow {
-	width:100%; 
-	height:100%;
-	/* border:1px solid grey; */
-	display:flex;
-	flex-direction: column;
-	justify-content: end;
-	gap:.5em;
-	overflow: scroll;
+	height:calc(80vh - 100px - 2em);
+	/* overflow-y: scroll; */
+	
+	& div.window {
+		scroll-snap-type: y manditory;
+		width:100%; 
+		height:100%;
+		overflow-y: scroll;
+		gap:.5em;
+	}
 
-	& div.bubble {
-		width: max-content;
-		padding: .5em;
-		margin: .25em;
+	& div.bubble-wrapper {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		&:first-child 	{ scroll-snap-align: start; }
+		&:last-child 	{ scroll-snap-align: end;
+							scroll-initial-target: nearest; }
 
-		& small {
-			margin-top: 6px; 
-			display: block;
-			opacity: .75; 
-			text-align: left;
-		}
-		
-		&.user {
-			text-align: right;
-			align-self: end;
-			background: linear-gradient(to bottom right, darkgoldenrod, var(--dgold) 85%);
-			border-radius: 12px 12px 0 12px;
-		}
-		&.friend {
-			background: linear-gradient(to top right, cadetblue, var(--lsteelblue) 35%);
-			border-radius: 12px 12px 12px 0;
-		}
-		&.cmd {
-			background-color: #333;
-			color: orange;
-			text-align: right;
-			align-self: end;
-			border-radius: 12px 12px 0 12px;
+		& > .bubble {
+			width: max-content;
+			padding: .5em;
+			margin: .25em;
+	
+			& small {
+				margin-top: 6px; 
+				display: block;
+				opacity: .75; 
+				text-align: left;
+			}
+			
+			&.user {
+				text-align: right;
+				align-self: end;
+				background: linear-gradient(to bottom right, darkgoldenrod, rgb(184, 164, 11));
+				border-radius: 12px 12px 0 12px;
+			}
+			&.friend {
+				background: linear-gradient(to top right, cadetblue, var(--lsteelblue) 35%);
+				border-radius: 12px 12px 12px 0;
+			}
+			&.cmd {
+				background-color: #333;
+				color: orange;
+				text-align: right;
+				justify-self: end;
+				border-radius: 12px 12px 0 12px;
+			}
 		}
 	}
 }

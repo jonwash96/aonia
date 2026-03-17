@@ -1,6 +1,7 @@
 import * as userService from './userService'
 import { io } from 'socket.io-client'
 const BACK_END_SERVER_URL = import.meta.env.VITE_BACK_END_SERVER_URL;
+const tokenized = localStorage.getItem('aonia-token');
 
 
 const delay = async (time) => await new Promise(geaux => 
@@ -11,10 +12,25 @@ let initializing = false;
 export let connection = undefined;
 
 
+
+export async function ping() {
+	let serverStatus = await fetch(BACK_END_SERVER_URL+'/chat/', {
+		"method": "PATCH",
+		"headers": {
+			"Content-Type": "application/json",
+			"Access-Control-Allow-Origin": "*",
+			"Authorization": `Bearer ${tokenized}`
+		}
+	});
+
+	serverStatus = await serverStatus.json();
+	if (serverStatus.error) throw new Error ("@chatService. Ping Error:", serverStatus.error);
+	return serverStatus
+}
+
+let reconnectionCount = 0;
 export async function connect(promise, proc, user, chatID, latestChat) {
 	if (initializing) return;
-	if (connection?.connected === false) return connection.connect()
-	else if (connection?.connected === true) return connection;
 
 	console.log("@ChatService > Connect", user._id);
 	initializing = true; 
@@ -34,19 +50,7 @@ export async function connect(promise, proc, user, chatID, latestChat) {
 		}
 	} else {promise.reject(null)};
 	
-	const tokenized = localStorage.getItem('aonia-token');
-	
-	let serverStatus = await fetch(BACK_END_SERVER_URL+'/chat/', {
-		"method": "PATCH",
-		"headers": {
-			"Content-Type": "application/json",
-			"Access-Control-Allow-Origin": "*",
-			"Authorization": `Bearer ${tokenized}`
-		}
-	});
-	
-	serverStatus = await serverStatus.json();
-	if (serverStatus.error) throw new Error ("Error Connecting to the Chat server.", serverStatus.error);
+	const serverStatus = await ping();
 	console.log("@ChatService > Chat Server Status:", serverStatus);
 	
 	await delay(100);
@@ -61,6 +65,7 @@ export async function connect(promise, proc, user, chatID, latestChat) {
 		connection.on('connect', () => {
 			console.log("@ChatService. socket.io connected to", connection.id);
 			initializing = false;
+			reconnectionCount = 0;
 		});
 		return proc.fulfil(connection)
 
@@ -71,9 +76,9 @@ export async function connect(promise, proc, user, chatID, latestChat) {
 };
 
 
-export function disconnect(hard=false) {
+export function disconnect(destroy=false) {
 	console.log("@Chat Service: Disconnecting chat socket...")
 	connection?.disconnect();
-	if (hard) connection = undefined;
+	if (destroy) connection = undefined;
 	return console.log("...Disconnected from chat server.")
 }

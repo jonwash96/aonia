@@ -27,13 +27,13 @@ export default function Conversation({props}) {
 
 	const handleSubmit = (input) => {
 		//TODO:: Change this to pid not uid for clarity
-		const newMessage = { ...input, uid: user.profile._id, session: (user?.session || socket.id), time: Date.now() };
+		const newMessage = { ...input, uid: user?.profile?._id, session: (user?.session || socket?.id), time: Date.now() };
 
-		console.log("@handleSubmit. Send New Message:", chatSelect._id, newMessage);
+		console.log("@handleSubmit. Send New Message:", chatSelect?._id, newMessage);
 
 		if (!input.text.startsWith('/') && chatSelect.temp) {
 			const newChat = { ...chatSelect, messages: [ ...chatSelect.messages, newMessage ] };
-			selectChat({ ...newChat, messages: [ ...chatSelect.messages, {text: "Creating new Chat. . ."} ]});
+			selectChat({ ...newChat, messages: [ ...chatSelect?.messages, {text: "Creating new Chat. . ."} ]});
 			console.log("@handleSubmit message. Creating new Chat...", newChat);
 			return socket.emit('create-chat', uid, newChat);
 		};
@@ -42,8 +42,7 @@ export default function Conversation({props}) {
 		if (input.text==='/clear') {
 			destroyCredentials(); 
 			navigate('/login');
-			window.location.reload();
-			return
+			return window.location.reload();
 		};
 
 		if (input.text.match(/^\/join user\s*\S+/gi)) 

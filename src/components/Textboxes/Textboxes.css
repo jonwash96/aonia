@@ -1,5 +1,12 @@
-section.Search {
+section.SmartSearch {
+	width: 100%;
+	& > form {
+		display: grid;
+		grid-template: 100% / auto 36px;
+	}
+
 	& input {
+		width: 100%;
 		background-color: #0248;
 		padding: 12px;
 		border-radius: 8px 0 0 8px;
@@ -22,11 +29,6 @@ section.Search {
 			background-color: var(--bgl1);
 			cursor: pointer;
 		}
-	}
-
-	& > form {
-		display: grid;
-		grid-template: 100% / auto 36px;
 	}
 
 	& div.search-suggestions {

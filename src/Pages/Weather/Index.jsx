@@ -24,6 +24,8 @@ export default function Weather() {
 	const { uid, user } = useUser();
 	const date = new Date();
 	const [weatherdata, setWeatherdata] = useState(weatherData);
+	const [headerMode, setHeaderMode] = useState({A:'', B:'hide'});
+	const toggleHeaderMode =()=> setHeaderMode(headerMode.A==='' ? {A:'hide', B:''} : {A:'', B:'hide'})
 
 	// useFetch(openweather.weatherFromLoc(lat, lon), (d)=>setOpenweatherResult(d));
 
@@ -44,7 +46,7 @@ export default function Weather() {
 
 		<section id="user">
 			{user 
-				? <><span>Welcome, {user.displayname}</span><Link to="/logout">Log Out</Link></>
+				? <span>Hello, {user.displayname}<br/><Link to="/logout">Log Out</Link></span>
 				: <><Link to="/login">Login</Link><Link to="/register">Sign up</Link></>
 			}
 		</section>
@@ -67,7 +69,7 @@ export default function Weather() {
 		</section>
 
 		<header className="today">
-			<div className="datetime headerA">
+			<div className={headerMode.A+" datetime headerA"} onClick={toggleHeaderMode}>
 				<p>EARTH</p>
 				<h1>
 					<span className="date">{date.getDate()} </span>
@@ -78,10 +80,10 @@ export default function Weather() {
 				<h4>{weatherdata?.city.country}</h4>
 			</div>
 
-			<div className="current-conditions headerB hide">
+			<div className={headerMode.B+" current-conditions headerB"} onClick={toggleHeaderMode}>
 				<p>{currentWeather?.weather[0].description}</p>
 				<h1>
-					<span>{currentWeather?.main.temp._imperialScum('f', 1, 0)}</span>
+					<span>{currentWeather?.main.temp._cfk('k', 'F', 1, 0)}</span>
 				</h1>
 				<h3>{weatherdata?.city.name}</h3>
 				<h4>{weatherdata?.city.country}</h4>

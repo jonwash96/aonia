@@ -15,8 +15,8 @@ export default function ChatsList({props}) {
 	const { uid, user, findFriends } = useUser();
 
 	const {	socket, toggleSocket,	appendMessage,	
-			chats,		setChats,		chatSelect, 	selectChat, 
-			createChat, findChat,		deleteChat,		renameChat,	 } = useChat();
+			chats,		setChats,	chatSelect, 	selectChat, 
+			createChat, findChat,	deleteChat,		renameChat,	 } = useChat();
 
 	const [view, setView] = useState(true);
 	const toggleView =()=> setView(!view);

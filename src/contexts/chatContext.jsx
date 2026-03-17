@@ -4,7 +4,8 @@ import useUser from './userContext'
 import * as userService from '../services/userService.js'
 import { useNavigate } from 'react-router'
 import generateRandomUUID from '../utils/generateRandomUUID'
-import { connection, connect, disconnect } from '../services/chatService.js'
+import { connection, connect, disconnect, ping } from '../services/chatService.js'
+import { _chats } from '../data/exoState.js'
 const BACK_END_SERVER_URL = import.meta.env.VITE_BACK_END_SERVER_URL;
 const BACK_END_PORT = import.meta.env.VITE_BACK_END_PORT;
 const CHAT_PORT = import.meta.env.VITE_CHATPORT;
@@ -29,7 +30,7 @@ export function ChatProvider({ uid, children }) {
 	const [chatEnabled, setChatEnabled] = useState(false);
 	const [socket, setSocket] = useState();
 	const [status, setStatus] = useState();
-	const [chats, setChats] = useState({});
+	const [chats, _setChats] = useState(_chats);
 	const [chatSelect, setChatSelect] = useState();
 	// const [messages, setMessages] = useState([
 	// 	{ text: "Test Message from friend", uid: '123_456A', files: [] },
@@ -70,10 +71,16 @@ export function ChatProvider({ uid, children }) {
 		})
 	};
 
-	const appendMessage = (message, chatID) => {
-		setChats({ ...chats, [chatID]: { 
-			...chats[chatID], messages: [ ...chats[chatID].messages, message ]
-		} });
+	const setChats = async (data) => {
+		Object.assign(_chats, data);
+		_setChats({ ..._chats })
+		console.log(chats)
+	};
+
+	const appendMessage = async (message, chatID) => {
+		console.log("@exoChat Chats:", chats);
+		_chats[chatID].messages.push(message);
+		_setChats(prev => ({ ..._chats }));
 	};
 
 	const findChat = (query, option) => {
@@ -116,19 +123,12 @@ export function ChatProvider({ uid, children }) {
 	},[chatEnabled]);
 
 
-	if (socket?.connected === true) {
+	if (socket) {
 		socket.on("connect_error", async (err) => {
 			console.error(`connect_error due to ${err.message}`);
-			// socket.disconnect();
-			// toggleSocket();
-			// await delay(200);
-			// toggleSocket();
-			connection.disconnect();
-		});
-
-		socket.on('receive-userdata', (data) => {
-			console.log("@ChatProvider. socket.io user", data);
-			setChats(data.chats);
+			console.warn("Socket:", socket);
+			disconnect(true);
+			socket && setSocket(null);
 		});
 
 		socket.on('chatdata', (chats) => {
@@ -150,6 +150,7 @@ export function ChatProvider({ uid, children }) {
 
 		socket.on('receive-message', (message, chatID) => {
 			console.log("Message Received:", message);
+			console.log("chats", chats)
 			appendMessage(message, chatID);
 		});
 

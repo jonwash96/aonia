@@ -1,5 +1,5 @@
 String.prototype._ellipses = function(maxChars=80) {
-	return this.length > maxChars 
+	return maxChars && this.length > maxChars 
       ? this.substring(0,maxChars)+"..." 
       : this;
 }
@@ -103,6 +103,24 @@ function imperialScum(unit='f', units=true, fixed=2, factor=1, both=false) {
             ? result[0] === f ? `${f.toFixed(fixed)}°F  (${result[1].toFixed(fixed)}°C)` : `${c.toFixed(fixed)}°C  (${result[1].toFixed(fixed)}°F)`
             : result === f ? `${f.toFixed(fixed)}°F` : `${c.toFixed(fixed)}°C`
         : result
+}
+
+String.prototype._cfk = cfk;
+Number.prototype._cfk = cfk;
+export function cfk(from, onto, units=1, fixed=2) {
+	let result, c;
+	
+	if (/c/i.test(from)) c = this;
+	else if (/f/i.test(from)) c = (this - 32) * (5 / 9);
+	else if (/k/i.test(from)) c = this - 273.15;
+
+	if (/c/i.test(onto)) result = c;
+	else if (/f/i.test(onto)) result = (c * 9 / 5) + 32;
+	else if (/k/i.test(onto)) result = c + 273.15;
+
+	return units 
+        ? result.toFixed(fixed)+'°'+onto
+		: result.toFixed(fixed);
 }
 
 String.prototype._toRoman = toRoman;

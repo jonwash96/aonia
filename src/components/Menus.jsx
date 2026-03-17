@@ -4,7 +4,7 @@ import ImageIcon from './ImageIcon';
 
 
 export function Ellipses({props}) {
-	const { name, id, icon } = props;
+	const { name, id, icon, item } = props;
 	const data = Object.entries(props).filter(([k]) => k.startsWith('&'));
 
 	return (
@@ -13,6 +13,7 @@ export function Ellipses({props}) {
 			<ul>
 				{data.map(([k,v]) => {
 					let title = k.slice(1).replaceAll('_',' ')._toTitleCase();
+
 					if (title.includes('%')) {
 						title = title.split('%');
 						return (

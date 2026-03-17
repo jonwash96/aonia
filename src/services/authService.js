@@ -35,7 +35,7 @@ export async function login(formData) {
 		});
 
 		const data = await res.json();
-		if (data.error) throw new Error(data.err);
+		if (data.error) throw new Error(data.error);
 		if (!data.token) throw new Error("Invalid Response from server. Token not found.");
 
 		localStorage.setItem('aonia-token', data.token);

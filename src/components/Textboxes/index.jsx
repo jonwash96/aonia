@@ -167,7 +167,7 @@ export function SmartSearch({props}) {
 	const validateSubmit = (e) => TCX.validateSubmit(e, _input, onSubmit, cmdHistory, setCmdHistory, clear);
 
 	return (
-		<section className={name+" Search"}>
+		<section className={name+" SmartSearch SmartTextbox"}>
 			<form onSubmit={validateSubmit}>
 				<input type="search" 
 					name="text"
@@ -219,7 +219,7 @@ export function SmartMessage({props}) {
 
 
 	return (
-		<section className={name+" SmartMessage"}>
+		<section className={name+" SmartMessage  SmartTextbox"}>
 			<form onSubmit={validateSubmit}>
 
 				<div className="uploads">

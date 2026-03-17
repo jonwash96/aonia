@@ -12,8 +12,7 @@ export default function Chat() {
 	const { uid, user, destroyCredentials, storeUID } = useUser();
 
 	const {	chatSelect } = useChat();
-			
-	useEffect(() => console.log("@Chat > chatSelect changed:", chatSelect), [chatSelect])
+		
 
 	return (
 		<main id="Chat">

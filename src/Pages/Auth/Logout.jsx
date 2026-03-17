@@ -17,8 +17,8 @@ export default function Logout() {
 				setUser(null)
 				setAuthToken(null)
 				navigate('/');
-			} catch (err) {
-				console.eror(err)
+			} catch (error) {
+				console.error(error)
 			}
 		})()
 	},[])

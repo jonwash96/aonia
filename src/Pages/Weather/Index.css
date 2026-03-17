@@ -10,7 +10,7 @@ main#Weather {
 
 	grid-gap: 1em;
 
-	& .Search {grid-area: sch;}
+	& section.SmartSearch {grid-area: sch;}
 	& section#user {grid-area: user;}
 	& section.hourly {grid-area: hr;}
 	& header.today {grid-area: head;}
@@ -18,23 +18,14 @@ main#Weather {
 	& section.meteo-map {grid-area: map;}
 }
 
-main#Weather div.Search {
-	& form {
-		width: 100%;
-		display: grid;
-		grid-template: auto / auto 40px;
-
-		& input {width: 100px;}
-	}
-}
-
-main#Weather section#user {
+main#Weather > section#user {
 	display: flex;
 	gap: 1em;
 	justify-content: end;
+	text-align: right;
 }
 
-main#Weather section.hourly {
+main#Weather > section.hourly {
 	overflow: hidden;
 	
 	& > .scroll-container {
@@ -48,7 +39,8 @@ main#Weather section.hourly {
 		display: flex;
 		gap: 1.5em;
 		flex-wrap: nowrap;
-		width: calc(130px * 7 + 7em);
+		/* width: calc(130px * 7 + 7em); */
+		width: auto;
 		min-width: 100%;
 	}
 }
@@ -79,6 +71,8 @@ main#Weather > header {
 	align-items: center;
 	padding: 1em;
 
+	&:hover { cursor: pointer; }
+
 	& h1, & p, & h3, & h4 {margin:0;}
 	
 	& h1 {
@@ -93,7 +87,7 @@ main#Weather > header {
 	}
 }
 
-main#Weather section.meteo-table {
+main#Weather > section.meteo-table {
 	width: 50vw;
 	height: 50vh;
 	overflow-x: scroll;
@@ -115,10 +109,46 @@ main#Weather section.meteo-table {
 	}
 }
 
-main#Weather section.meteo-map {
+main#Weather > section.meteo-map {
 	text-align: center;
 
 	& inner-wrapper {
 		width: 80%;
 	}
+}
+
+
+
+@media screen and (max-width: 480px) {
+	main#Weather {
+		grid-template: 
+			"sch	user"  	auto
+			"head	head"  	auto
+			"hr		hr"  	auto
+			"map	map"  	auto
+			"data	data"  	auto / auto auto;
+
+		& section.SmartSearch { width: auto; }
+		& section#user span { width: max-content; }
+		& section.meteo-table { width: auto; }
+
+		&:has(> section.SmartSearch > form > input:focus) {
+			grid-template: 
+				"user	user"  	auto
+				"sch	sch"  	auto
+				"head	head"  	auto
+				"hr		hr"  	auto
+				"map	map"  	auto
+				"data	data"  	auto / auto auto;
+
+			& section.SmartSearch { width:100%; }
+		}
+
+		& > section.hourly .flex-container {
+			gap: .75em;
+			width: auto;
+		}
+	}
+
+	div.WeatherCard { gap: 6px; }
 }

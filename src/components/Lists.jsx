@@ -4,7 +4,7 @@ import * as Menus from './Menus'
 
 
 export function ContentList({props}) {
-	const { name, items, titles, tSize, details, dSize, maxLines, icon, user, menu, defaultMessage, onClick } = props;
+	const { name, items, titles, tSize, details, dSize, maxLines, icon, user, menu, defaultMessage, onClick, style } = props;
 
 	const resolveDot = (ctx, text) => {
 		if (typeof text === 'function') return text;
@@ -64,7 +64,11 @@ export function ContentList({props}) {
 		<section className={name+' ContentList'}>
 			<ul>
 				{items.map((item, idx) => 
-					<li key={idx} className={name+'-li clickable'} onClick={resolveDot(item, onClick)}>
+					<li key={idx} 
+						className={name+'-li clickable'} 
+						onClick={resolveDot(item, onClick)}
+						style={{ ...style?.li, border: resolveDot(item, style?.border) || 'inherit' }}>
+
 						<ImageIcon 
 							src={resolveDot(item, icon.images) || icon.src || ''}
 							role={icon.role || ''} 
@@ -92,6 +96,7 @@ export function ContentList({props}) {
 						<div className="right">
 							<Menus.Ellipses props={{ ...menu, item }} />
 						</div>
+
 					</li>
 				)}
 			</ul>

@@ -34,7 +34,7 @@ export default function ChatsList({props}) {
 	const handleChatSelection = (query, option) => {
 		let chat = findChat(query, option);
 		if (!chat) chat = createChat([user.profile, friends.find(f => f._id === query)]);
-
+		if (chat?.markUnread) chat.markUnread = false;
 		return selectChat(chat);
 	};
 
@@ -69,6 +69,7 @@ export default function ChatsList({props}) {
 					titles: '&name',
 					details: '&messages?.at(-1).text',
 					maxLines: 2,
+					style: { border: '&markUnread ? "1px solid white" : "inherit"' },
 					onClick: [handleChatSelection, '&_id', 'byChatID'],
 					icon: {images: [getFriendPhotoUrl, '&messages?.at(-1).uid', true]},
 					user,

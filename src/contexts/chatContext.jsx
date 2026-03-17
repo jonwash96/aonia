@@ -77,9 +77,10 @@ export function ChatProvider({ uid, children }) {
 		console.log(chats)
 	};
 
-	const appendMessage = async (message, chatID) => {
+	const appendMessage = async (message, chatID, markUnread=false) => {
 		console.log("@exoChat Chats:", chats);
 		_chats[chatID].messages.push(message);
+		_chats[chatID].markUnread = markUnread;
 		_setChats(prev => ({ ..._chats }));
 	};
 
@@ -128,15 +129,19 @@ export function ChatProvider({ uid, children }) {
 			console.error(`connect_error due to ${err.message}`);
 			console.warn("Socket:", socket);
 			disconnect(true);
-			socket && setSocket(null);
+			socket && setSocket(prev => null);
 		});
 
 		socket.on('chatdata', (chats) => {
 			/* Receives all chat objs from server on connection */
 			console.log("@ChatProvider. chatData received", chats);
 			const obj = {};
-			chats.length > 0 && chats.forEach(chat => obj[chat._id] = chat);
+			chats.length > 0 && chats.forEach(chat => {
+				socket.emit('join-room', uid, chat._id)
+				obj[chat._id] = chat
+			});
 			setChats(obj);
+
 		});
 
 		socket.on('receive-chatupdate', (data, chatID) => {
@@ -151,7 +156,8 @@ export function ChatProvider({ uid, children }) {
 		socket.on('receive-message', (message, chatID) => {
 			console.log("Message Received:", message);
 			console.log("chats", chats)
-			appendMessage(message, chatID);
+			let markUnread = !(chatSelect && chatSelect?._id === chatID);
+			appendMessage(message, chatID, markUnread);
 		});
 
 		socket.on('chat-created', async (chat) => {

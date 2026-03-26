@@ -4,8 +4,8 @@ String.prototype._ellipses = function(maxChars=80) {
       : this;
 }
 
-String.prototype._toTitleCase = function() {
-    const words = this.split(' ');
+String.prototype._toTitleCase = function(r='', w) {
+    const words = this.replaceAll(r, r !== '' ? w ? w : ' ' : '').split(' ');
     return words.map(word => {
         if (word.charAt(0).match(/\*/)) return word.replace('*', '')
         else return word.charAt(0).toUpperCase() + word.substring(1).toLowerCase();

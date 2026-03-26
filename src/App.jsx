@@ -9,19 +9,12 @@ import useUser from './contexts/userContext.jsx'
 import './utils/bancroft-proto.js'
 import Weather from './pages/Weather'
 import Sidebar from './components/Nav/Sidebar.jsx'
-import People from './pages/People'
 import Login from './pages/Auth/Login.jsx'
 import Register from './pages/Auth/Register.jsx'
 import Logout from './pages/Auth/Logout.jsx'
+import AstronomyHome from './pages/Astronomy'
 
 
-// const SECRET = import.meta.VITE_SECRET;
-// const NASA_API_KEY = import.meta.env.VITE_NASA_API_KEY;
-
-// const neows = {
-// 	API: import.meta.env.VITE_NASA_NEOWS,
-// 	indexByDateRange: function (start, end) { return `${this.API}feed?start_date=${start}&end_date=${end}&api_key=${NASA_API_KEY}` }, // Date Format = 2015-09-07
-// }
 
 function App() {
 	const { uid } = useUser();
@@ -48,6 +41,11 @@ function App() {
 					element={<Logout />}
 				/>
 				
+
+				<Route
+					path="/astronomy"
+					element={<AstronomyHome />}
+				/>
 
 				<Route
 					path="/"
@@ -86,7 +84,7 @@ function App() {
 				
 				<Route 
 					path="users/profile" 
-					element={<People />} 
+					element={<Chat />} 
 				/>
 			</Routes> 
 

@@ -34,7 +34,7 @@ export default function Sidebar() {
 				name: 'astronomy',
 				icon: {
 					svg: '&astronomyIcon',
-					onClick: ()=>navigate('/')
+					onClick: ()=>navigate('/astronomy')
 				},
 				menu: {
 					'&astronomy': ()=>navigate('/astronomy'),
